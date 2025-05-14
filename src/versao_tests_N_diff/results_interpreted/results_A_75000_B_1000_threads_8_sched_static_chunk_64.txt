@@ -1,0 +1,11 @@
+Média Tempo init matriz seq: 0.0000743810 segundos
+Variância Tempo init matriz seq: 0.0000000000
+
+Média Tempo init matriz par: 0.0000722857 segundos
+Variância Tempo init matriz par: 0.0000000000
+
+Média Tempo LCS seq:        0.2607780952 segundos
+Variância Tempo LCS seq:    0.0000211462
+
+Média Tempo LCS par:        0.2286770476 segundos
+Variância Tempo LCS par:    0.0002712844
