@@ -21,8 +21,7 @@ void print_time(double start, double end, const char* stage) {
     printf("Tempo para %s: %.6f segundos\n", stage, end - start);
 }
 
-/* Read sequence from a file to a char vector.
-   Filename is passed as parameter */
+/* Função para ler arquivos com as sequencias */
 char* read_seq(char *fname) {
     FILE *fseq = NULL;
     long size = 0;
@@ -112,12 +111,12 @@ void init_matrix(mtype ** score_matrix, int size_A, int size_B) {
 
 // LCS com paralelismo otimizado
 int LCS_parallel(mtype **score_matrix, int size_A, int size_B, char *seq_A, char *seq_B) {
-    #pragma omp parallel num_threads(4)
+    #pragma omp parallel num_threads(8)
     {
         for (int diag = 2; diag <= size_A + size_B; diag++) {
             int start = (diag > size_A) ? (diag - size_A) : 1;
             int end = (diag > size_B) ? size_B : (diag - 1);
-            #pragma omp for schedule(static, 64)
+            #pragma omp for schedule(guided, 128)
             for (int i = start; i <= end; i++) {
                 int j = diag - i;
                 if (seq_A[j - 1] == seq_B[i - 1]) {
@@ -136,7 +135,6 @@ int LCS_parallel(mtype **score_matrix, int size_A, int size_B, char *seq_A, char
 
 int main(int argc, char ** argv) {
 
-    double start_time, end_time;
     char *seq_A, *seq_B;
     int size_A, size_B;
 
@@ -151,25 +149,18 @@ int main(int argc, char ** argv) {
     size_B = strlen(seq_B);
 
     // ########## PARALELO ##########
-    mtype ** scoreMatrixParallel = allocate_matrix(size_A, size_B);
+    mtype ** score_matrix = allocate_matrix(size_A, size_B);
 
-    start_time = omp_get_wtime();
-    init_matrix(scoreMatrixParallel, size_A, size_B);
-    end_time = omp_get_wtime();
-    print_time(start_time, end_time, "init matriz par");
-
-    start_time = omp_get_wtime();
-    mtype score_par = LCS_parallel(scoreMatrixParallel, size_A, size_B, seq_A, seq_B);
-    end_time = omp_get_wtime();
-    print_time(start_time, end_time, "LCS par");
+    init_matrix(score_matrix, size_A, size_B);
+    mtype score_par = LCS_parallel(score_matrix, size_A, size_B, seq_A, seq_B);
 
     #ifdef DEBUGMATRIX
-        print_matrix(seq_A, seq_B, scoreMatrixParallel, size_A, size_B);
+        print_matrix(seq_A, seq_B, score_matrix, size_A, size_B);
     #endif
 
-    printf("Score par: %d\n\n", score_par);
+    printf("%d\n\n", score_par);
 
-    free_matrix(scoreMatrixParallel, size_B);
+    free_matrix(score_matrix, size_B);
 
     return EXIT_SUCCESS;
 }

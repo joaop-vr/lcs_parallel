@@ -1,0 +1,99 @@
+Configuração: threads=1, sched=dynamic, chunk=128.txt
+Média dos tempos totais:     49.2948658000 segundos
+Variância dos tempos totais: 8335.4736885403
+
+Configuração: threads=1, sched=dynamic, chunk=64.txt
+Média dos tempos totais:     51.3344143619 segundos
+Variância dos tempos totais: 9060.3942665561
+
+Configuração: threads=1, sched=guided, chunk=128.txt
+Média dos tempos totais:     48.5692764191 segundos
+Variância dos tempos totais: 8128.5283360488
+
+Configuração: threads=1, sched=guided, chunk=64.txt
+Média dos tempos totais:     47.9964238191 segundos
+Variância dos tempos totais: 7906.9484945901
+
+Configuração: threads=1, sched=static, chunk=128.txt
+Média dos tempos totais:     48.3339897619 segundos
+Variância dos tempos totais: 8040.5485022845
+
+Configuração: threads=1, sched=static, chunk=64.txt
+Média dos tempos totais:     48.6813312952 segundos
+Variância dos tempos totais: 8100.3983640847
+
+Configuração: threads=2, sched=dynamic, chunk=128.txt
+Média dos tempos totais:     28.5752881238 segundos
+Variância dos tempos totais: 2844.3793265908
+
+Configuração: threads=2, sched=dynamic, chunk=64.txt
+Média dos tempos totais:     29.6490885429 segundos
+Variância dos tempos totais: 3052.0878080918
+
+Configuração: threads=2, sched=guided, chunk=128.txt
+Média dos tempos totais:     28.3077397428 segundos
+Variância dos tempos totais: 2829.9534606285
+
+Configuração: threads=2, sched=guided, chunk=64.txt
+Média dos tempos totais:     27.9184716381 segundos
+Variância dos tempos totais: 2739.6822244591
+
+Configuração: threads=2, sched=static, chunk=128.txt
+Média dos tempos totais:     29.5560695238 segundos
+Variância dos tempos totais: 3023.1303339769
+
+Configuração: threads=2, sched=static, chunk=64.txt
+Média dos tempos totais:     30.8432319143 segundos
+Variância dos tempos totais: 3309.3936377891
+
+Configuração: threads=4, sched=dynamic, chunk=128.txt
+Média dos tempos totais:     20.7321375715 segundos
+Variância dos tempos totais: 1572.4941313932
+
+Configuração: threads=4, sched=dynamic, chunk=64.txt
+Média dos tempos totais:     21.8030512762 segundos
+Variância dos tempos totais: 1742.5046023502
+
+Configuração: threads=4, sched=guided, chunk=128.txt
+Média dos tempos totais:     19.4298989714 segundos
+Variância dos tempos totais: 1371.4149660063
+
+Configuração: threads=4, sched=guided, chunk=64.txt
+Média dos tempos totais:     19.7659200857 segundos
+Variância dos tempos totais: 1428.3085757463
+
+Configuração: threads=4, sched=static, chunk=128.txt
+Média dos tempos totais:     22.2124981619 segundos
+Variância dos tempos totais: 1739.0432154000
+
+Configuração: threads=4, sched=static, chunk=64.txt
+Média dos tempos totais:     22.8241368572 segundos
+Variância dos tempos totais: 1845.8335117896
+
+Configuração: threads=8, sched=dynamic, chunk=128.txt
+Média dos tempos totais:     19.8087043334 segundos
+Variância dos tempos totais: 1424.9005948868
+
+Configuração: threads=8, sched=dynamic, chunk=64.txt
+Média dos tempos totais:     19.7610285524 segundos
+Variância dos tempos totais: 1397.3245376197
+
+Configuração: threads=8, sched=guided, chunk=128.txt
+Média dos tempos totais:     18.7440712952 segundos
+Variância dos tempos totais: 1258.7213855964
+
+Configuração: threads=8, sched=guided, chunk=64.txt
+Média dos tempos totais:     18.9046267238 segundos
+Variância dos tempos totais: 1289.2760088744
+
+Configuração: threads=8, sched=static, chunk=128.txt
+Média dos tempos totais:     21.8800122095 segundos
+Variância dos tempos totais: 1676.4259397673
+
+Configuração: threads=8, sched=static, chunk=64.txt
+Média dos tempos totais:     22.1168714667 segundos
+Variância dos tempos totais: 1727.7081779958
+
+Melhor configuração média encontrada:
+Configuração: threads=8, sched=guided, chunk=128.txt
+Média total paralela: 18.7440712952 segundos
