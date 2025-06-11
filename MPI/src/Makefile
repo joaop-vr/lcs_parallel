@@ -1,30 +1,39 @@
-# Variáveis para o compilador, flags e arquivos
-CC = gcc
-CFLAGS = -Wall -O3 -fopenmp   # Flags de compilação, incluindo OpenMP
-LDFLAGS = -fopenmp            # Flags de linkedição, incluindo OpenMP
-OBJ = lcs.o                   # Arquivo objeto
-EXEC_LCS = lcs                # Executável principal
-EXEC_GEN = generate_input     # Executável de geração de input
+#############################
+# Makefile para programa MPI
+#############################
 
-# Regra padrão (compila ambos)
-all: $(EXEC_LCS) $(EXEC_GEN)
+# Compilador e flags
+CC      = mpicc
+CFLAGS  = -std=c99 -Wall -O3
 
-# Regra para gerar o lcs
-$(EXEC_LCS): $(OBJ)
-	$(CC) $(LDFLAGS) $(OBJ) -o $(EXEC_LCS)   # Linkando com OpenMP
+# Nome do executável
+TARGET  = lcs_mpi
 
-# Regra para gerar o objeto
-$(OBJ): lcs.c
-	$(CC) $(CFLAGS) -c lcs.c
+# Arquivos-fonte
+SRCS    = lcs.c
 
-# Regra para generate_input
-$(EXEC_GEN): generate_input.c
-	$(CC) -Wall -o $(EXEC_GEN) generate_input.c
+# Regra padrão
+all: $(TARGET)
 
-# Limpeza dos arquivos gerados
+# Como compilar o executável
+$(TARGET): $(SRCS)
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Para rodar rapidamente (exemplo):
+# make run ARGS="fileA.txt fileB.txt"
+run: $(TARGET)
+	mpirun -np 4 ./$(TARGET) $(ARGS)
+
+# Limpeza
+.PHONY: clean
 clean:
-	rm -f $(OBJ) $(EXEC_LCS) $(EXEC_GEN)
+	rm -f $(TARGET) *.o
 
-# Compilação com debug
-debug: CFLAGS += -DDEBUGMATRIX
-debug: clean all
+# Exibir ajuda
+.PHONY: help
+default: help
+help:
+	@echo "Uso: make [all|run|clean]"
+	@echo "  all   : compila o executável ($(TARGET))"
+	@echo "  run   : executa com mpirun (use 'make run ARGS=\"fileA fileB\"')"
+	@echo "  clean : remove executáveis e objetos"
