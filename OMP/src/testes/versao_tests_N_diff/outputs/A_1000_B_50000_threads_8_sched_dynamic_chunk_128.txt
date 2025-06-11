@@ -1,0 +1,252 @@
+--- Execução 1 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000422 segundos
+Tempo para LCS seq: 0.058028 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000443 segundos
+Tempo para LCS par: 0.154851 segundos
+Score par: 1000
+
+
+--- Execução 2 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000521 segundos
+Tempo para LCS seq: 0.057983 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000421 segundos
+Tempo para LCS par: 0.130279 segundos
+Score par: 1000
+
+
+--- Execução 3 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000423 segundos
+Tempo para LCS seq: 0.064719 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000501 segundos
+Tempo para LCS par: 0.131071 segundos
+Score par: 1000
+
+
+--- Execução 4 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000429 segundos
+Tempo para LCS seq: 0.057131 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000508 segundos
+Tempo para LCS par: 0.130897 segundos
+Score par: 1000
+
+
+--- Execução 5 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000418 segundos
+Tempo para LCS seq: 0.057355 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000426 segundos
+Tempo para LCS par: 0.129960 segundos
+Score par: 1000
+
+
+--- Execução 6 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000426 segundos
+Tempo para LCS seq: 0.056899 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000518 segundos
+Tempo para LCS par: 0.130746 segundos
+Score par: 1000
+
+
+--- Execução 7 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000419 segundos
+Tempo para LCS seq: 0.056986 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000425 segundos
+Tempo para LCS par: 0.129601 segundos
+Score par: 1000
+
+
+--- Execução 8 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000420 segundos
+Tempo para LCS seq: 0.056839 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000475 segundos
+Tempo para LCS par: 0.130508 segundos
+Score par: 1000
+
+
+--- Execução 9 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000491 segundos
+Tempo para LCS seq: 0.056623 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000502 segundos
+Tempo para LCS par: 0.138797 segundos
+Score par: 1000
+
+
+--- Execução 10 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000418 segundos
+Tempo para LCS seq: 0.056662 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000574 segundos
+Tempo para LCS par: 0.130275 segundos
+Score par: 1000
+
+
+--- Execução 11 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000489 segundos
+Tempo para LCS seq: 0.056292 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000420 segundos
+Tempo para LCS par: 0.129825 segundos
+Score par: 1000
+
+
+--- Execução 12 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000502 segundos
+Tempo para LCS seq: 0.056683 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000431 segundos
+Tempo para LCS par: 0.130041 segundos
+Score par: 1000
+
+
+--- Execução 13 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000419 segundos
+Tempo para LCS seq: 0.057961 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000513 segundos
+Tempo para LCS par: 0.130521 segundos
+Score par: 1000
+
+
+--- Execução 14 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000420 segundos
+Tempo para LCS seq: 0.057093 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000501 segundos
+Tempo para LCS par: 0.133655 segundos
+Score par: 1000
+
+
+--- Execução 15 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000426 segundos
+Tempo para LCS seq: 0.056826 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000419 segundos
+Tempo para LCS par: 0.129814 segundos
+Score par: 1000
+
+
+--- Execução 16 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000421 segundos
+Tempo para LCS seq: 0.056947 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000521 segundos
+Tempo para LCS par: 0.129748 segundos
+Score par: 1000
+
+
+--- Execução 17 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000420 segundos
+Tempo para LCS seq: 0.056604 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000420 segundos
+Tempo para LCS par: 0.136422 segundos
+Score par: 1000
+
+
+--- Execução 18 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000427 segundos
+Tempo para LCS seq: 0.056986 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000423 segundos
+Tempo para LCS par: 0.129620 segundos
+Score par: 1000
+
+
+--- Execução 19 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000509 segundos
+Tempo para LCS seq: 0.057583 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000422 segundos
+Tempo para LCS par: 0.170663 segundos
+Score par: 1000
+
+
+--- Execução 20 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000419 segundos
+Tempo para LCS seq: 0.057211 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000425 segundos
+Tempo para LCS par: 0.129882 segundos
+Score par: 1000
+
+
+--- Execução 21 ---
+Tam A: 1000
+Tam B: 50000
+Tempo para init matriz seq: 0.000436 segundos
+Tempo para LCS seq: 0.057671 segundos
+Score seq: 1000
+
+Tempo para init matriz par: 0.000427 segundos
+Tempo para LCS par: 0.130219 segundos
+Score par: 1000
+
+
