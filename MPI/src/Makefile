@@ -1,39 +1,52 @@
 #############################
-# Makefile para programa MPI
+# Makefile para compilar em paralelo e sequencial
 #############################
 
-# Compilador e flags
-CC      = mpicc
-CFLAGS  = -std=c99 -Wall -O3
+# Compiladores e flags
+CC_MPI      = mpicc
+CC_SEQ      = gcc
+CFLAGS_SEQ      = -std=c99 -Wall
+CFLAGS_MPI      = -std=c99 -Wall -O3
 
-# Nome do executável
-TARGET  = lcs_mpi
+# Nomes dos executáveis
+PAR_TARGET  = lcs_mpi
+SEQ_TARGET  = lcs_sequencial
 
 # Arquivos-fonte
-SRCS    = lcs.c
+PAR_SRCS    = lcs.c
+SEQ_SRCS    = lcs_sequencial.c
 
-# Regra padrão
-all: $(TARGET)
+# Letras especiais
+.PHONY: all paralelo sequencial run clean help
 
-# Como compilar o executável
-$(TARGET): $(SRCS)
-	$(CC) $(CFLAGS) -o $@ $^
-
-# Para rodar rapidamente (exemplo):
-# make run ARGS="fileA.txt fileB.txt"
-run: $(TARGET)
-	mpirun -np 4 ./$(TARGET) $(ARGS)
-
-# Limpeza
-.PHONY: clean
-clean:
-	rm -f $(TARGET) *.o
-
-# Exibir ajuda
-.PHONY: help
 default: help
+
+# Regra para compilação paralela (MPI)
+paralelo: $(PAR_TARGET)
+
+$(PAR_TARGET): $(PAR_SRCS)
+	$(CC_MPI) $(CFLAGS_MPI) -o $@ $^
+
+# Regra para compilação sequencial
+equential: sequencial
+
+sequencial: $(SEQ_TARGET)
+
+$(SEQ_TARGET): $(SEQ_SRCS)
+	$(CC_SEQ) $(CFLAGS_SEQ) -o $@ $^
+
+# Para rodar em paralelo (MPI)
+run: paralelo
+	mpirun -np 4 ./$(PAR_TARGET) $(ARGS)
+
+# Limpeza de artefatos
+clean:
+	rm -f $(PAR_TARGET) $(SEQ_TARGET) *.o generate
+
+# Ajuda
 help:
-	@echo "Uso: make [all|run|clean]"
-	@echo "  all   : compila o executável ($(TARGET))"
-	@echo "  run   : executa com mpirun (use 'make run ARGS=\"fileA fileB\"')"
-	@echo "  clean : remove executáveis e objetos"
+	@echo "Uso: make [paralelo|sequencial|run|clean]"
+	@echo "  paralelo    : compila com MPI ($(PAR_TARGET))"
+	@echo "  sequencial  : compila apenas o lcs_sequencial ($(SEQ_TARGET))"
+	@echo "  run         : executa $(PAR_TARGET) com mpirun (use 'make run ARGS=\"fileA fileB\"')"
+	@echo "  clean       : remove executáveis e objetos"
