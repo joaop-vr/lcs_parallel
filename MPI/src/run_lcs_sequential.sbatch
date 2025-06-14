@@ -46,4 +46,3 @@ for fileA in "${INPUT_DIR}"/*A.in; do
 done
 
 echo "=== Todos os outputs estão em ${OUTPUT_DIR} ==="
-

@@ -13,7 +13,7 @@ PAR_TARGET  = lcs_mpi
 SEQ_TARGET  = lcs_sequencial
 
 # Arquivos-fonte
-PAR_SRCS    = lcs.c
+PAR_SRCS    = lcs_parallel.c
 SEQ_SRCS    = lcs_sequencial.c
 
 # Letras especiais

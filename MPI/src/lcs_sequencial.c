@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #ifndef max
 #define max( a, b ) ( ((a) > (b)) ? (a) : (b) )
@@ -130,41 +131,74 @@ void freeScoreMatrix(mtype **scoreMatrix, int sizeB) {
 	free(scoreMatrix);
 }
 
-int main(int argc, char ** argv) {
-	// sequence pointers for both sequences
-	char *seqA, *seqB;
 
-	// sizes of both sequences
-	int sizeA, sizeB;
+int main(int argc, char **argv) {
+    if (argc != 3) {
+        fprintf(stderr, "Uso: %s <arquivoA.in> <arquivoB.in>\n", argv[0]);
+        return EXIT_FAILURE;
+    }
 
-	//read both sequences
-	seqA = read_seq("fileA.in");
-	seqB = read_seq("fileB.in");
+    // marcadores de tempo usando clock()
+    clock_t t_start, t_after_init, t_after_lcs, t_end;
+    double t_init, t_lcs, t_total;
 
-	//find out sizes
-	sizeA = strlen(seqA);
-	sizeB = strlen(seqB);
+    // Início do timer total
+    t_start = clock();
 
-	// allocate LCS score matrix
-	mtype ** scoreMatrix = allocateScoreMatrix(sizeA, sizeB);
+    // leitura das sequências
+    char *seqA = read_seq(argv[1]);
+    if (!seqA) {
+        fprintf(stderr, "Erro ao ler sequência A: %s\n", argv[1]);
+        return EXIT_FAILURE;
+    }
+    char *seqB = read_seq(argv[2]);
+    if (!seqB) {
+        fprintf(stderr, "Erro ao ler sequência B: %s\n", argv[2]);
+        free(seqA);
+        return EXIT_FAILURE;
+    }
 
-	//initialize LCS score matrix
-	initScoreMatrix(scoreMatrix, sizeA, sizeB);
+    int sizeA = strlen(seqA);
+    int sizeB = strlen(seqB);
 
-	//fill up the rest of the matrix and return final score (element locate at the last line and collumn)
-	mtype score = LCS(scoreMatrix, sizeA, sizeB, seqA, seqB);
+    // alocação e inicialização da matriz
+    mtype **scoreMatrix = allocateScoreMatrix(sizeA, sizeB);
+    if (!scoreMatrix) {
+        fprintf(stderr, "Falha ao alocar matriz de pontuações\n");
+        free(seqA);
+        free(seqB);
+        return EXIT_FAILURE;
+    }
+    initScoreMatrix(scoreMatrix, sizeA, sizeB);
 
-	/* if you wish to see the entire score matrix,
-	 for debug purposes, define DEBUGMATRIX. */
-#ifdef DEBUGMATRIX
-	printMatrix(seqA, seqB, scoreMatrix, sizeA, sizeB);
-#endif
+    // Marca o fim da inicialização
+    t_after_init = clock();
 
-	//print score
-	printf("\nScore: %d\n", score);
+    // cálculo do LCS
+    mtype score = LCS(scoreMatrix, sizeA, sizeB, seqA, seqB);
 
-	//free score matrix
-	freeScoreMatrix(scoreMatrix, sizeB);
+    // Marca o fim do cálculo do LCS
+    t_after_lcs = clock();
 
-	return EXIT_SUCCESS;
+    // libera estruturas
+    freeScoreMatrix(scoreMatrix, sizeB);
+    free(seqA);
+    free(seqB);
+
+    // Marca o fim total
+    t_end = clock();
+
+    // converte em segundos
+    t_init  = (double)(t_after_init - t_start)   / CLOCKS_PER_SEC;
+    t_lcs   = (double)(t_after_lcs  - t_after_init) / CLOCKS_PER_SEC;
+    t_total = (double)(t_end         - t_start)   / CLOCKS_PER_SEC;
+
+    // imprime tempos e score
+    printf("Tempos (segundos):\n");
+    printf("  alocação+init: %.6f\n", t_init);
+    printf("  LCS compute : %.6f\n", t_lcs);
+    printf("  tempo total : %.6f\n", t_total);
+    printf("Score: %d\n\n", score);
+
+    return EXIT_SUCCESS;
 }
