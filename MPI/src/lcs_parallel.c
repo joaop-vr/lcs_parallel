@@ -9,8 +9,19 @@
 
 typedef unsigned short mtype;
 
+/* Mapeia A,C,G,T para 0..3; retorna -1 se outro char */
+static inline int char_idx(char c) {
+    switch(c) {
+        case 'A': return 0;
+        case 'C': return 1;
+        case 'G': return 2;
+        case 'T': return 3;
+        default:  return -1;
+    }
+}
+
 /* 
- * Função para ler arquivos com as sequências (cada linha, retirando '\n')
+ * Função para ler arquivos com as sequências (cada linha, retirando '\n' e '\r')
  * Apenas o processo rank 0 lê do disco; depois a string será broadcasted.
  */
 char* read_seq(const char *fname, int *out_len) {
@@ -82,164 +93,209 @@ int main(int argc, char *argv[]) {
     MPI_Bcast(seq_A, size_A + 1, MPI_CHAR, 0, MPI_COMM_WORLD);
     MPI_Bcast(seq_B, size_B + 1, MPI_CHAR, 0, MPI_COMM_WORLD);
 
-    // *** Construção da tabela P sobre seq_A:
-    //    P[c][j] = última posição p ≤ j em seq_A onde seq_A[p-1] == c, ou 0 se não houver.
-    //    Usamos dimensão 256 para todos os bytes. Cada entrada é int.
-    int *P = NULL;
+    // -----------------------------
+    // 1) Construção da tabela P4
+    // -----------------------------
+    // Medição de tempo apenas em rank 0:
+    double tP_start = 0.0, tP_end = 0.0;
     if (rank == 0) {
-        P = (int*) malloc(256 * (size_A + 1) * sizeof(int));
-        if (!P) {
-            fprintf(stderr, "[rank %d] Falha ao alocar P table\n", rank);
+        tP_start = MPI_Wtime();
+    }
+
+    int *P4 = NULL;
+    if (rank == 0) {
+        // Aloca P4[4][size_A+1]
+        P4 = (int*) malloc(4 * (size_A + 1) * sizeof(int));
+        if (!P4) {
+            fprintf(stderr, "[rank %d] Falha ao alocar P4 table\n", rank);
             MPI_Abort(MPI_COMM_WORLD, 1);
         }
-        // Inicializa P[c][0] = 0 para todo c
-        for (int c = 0; c < 256; ++c) {
-            P[c * (size_A + 1) + 0] = 0;
+        // Inicializa P4[idx][0] = 0 para idx=0..3
+        for (int idx = 0; idx < 4; ++idx) {
+            P4[idx * (size_A + 1) + 0] = 0;
+        }
+        // (Opcional: construir idx_A para acelerar char_idx de seq_A)
+        int *idx_A = (int*) malloc((size_A + 1) * sizeof(int));
+        if (!idx_A) {
+            fprintf(stderr, "[rank %d] Falha ao alocar idx_A\n", rank);
+            MPI_Abort(MPI_COMM_WORLD, 1);
+        }
+        idx_A[0] = -1;
+        for (int j = 1; j <= size_A; ++j) {
+            idx_A[j] = char_idx(seq_A[j-1]);
         }
         // Preenche para j = 1..size_A
         for (int j = 1; j <= size_A; ++j) {
-            unsigned char ch = (unsigned char) seq_A[j-1];
-            for (int c = 0; c < 256; ++c) {
-                if ((unsigned char)c == ch) {
-                    P[c * (size_A + 1) + j] = j;
+            int idx_here = idx_A[j]; // 0..3 ou -1
+            for (int idx = 0; idx < 4; ++idx) {
+                if (idx == idx_here) {
+                    P4[idx * (size_A + 1) + j] = j;
                 } else {
-                    P[c * (size_A + 1) + j] = P[c * (size_A + 1) + (j-1)];
+                    P4[idx * (size_A + 1) + j] = P4[idx * (size_A + 1) + (j-1)];
                 }
             }
         }
+        free(idx_A);
     } else {
-        // Aloca espaço para receber P via broadcast
-        P = (int*) malloc(256 * (size_A + 1) * sizeof(int));
-        if (!P) {
-            fprintf(stderr, "[rank %d] Falha ao alocar P table (receptor)\n", rank);
+        // Aloca espaço para receber P4 via broadcast
+        P4 = (int*) malloc(4 * (size_A + 1) * sizeof(int));
+        if (!P4) {
+            fprintf(stderr, "[rank %d] Falha ao alocar P4 table (receptor)\n", rank);
             MPI_Abort(MPI_COMM_WORLD, 1);
         }
     }
-    // Broadcast de P para todos
-    MPI_Bcast(P, 256 * (size_A + 1), MPI_INT, 0, MPI_COMM_WORLD);
+    // Broadcast de P4 para todos
+    MPI_Bcast(P4, 4 * (size_A + 1), MPI_INT, 0, MPI_COMM_WORLD);
 
-    // *** Preparação para DP linha-a-linha
-    // prev_row e curr_row de tamanho size_A+1
-    mtype *prev_row = (mtype*) malloc((size_A + 1) * sizeof(mtype));
-    mtype *curr_row = (mtype*) malloc((size_A + 1) * sizeof(mtype));
-    if (!prev_row || !curr_row) {
-        fprintf(stderr, "[rank %d] Falha ao alocar prev_row/curr_row\n", rank);
+    if (rank == 0) {
+        tP_end = MPI_Wtime();
+    }
+    // -----------------------------
+    // 2) Inicialização de outras estruturas
+    // -----------------------------
+    // Medição de tempo em rank 0:
+    double tInit_start = 0.0, tInit_end = 0.0;
+    MPI_Barrier(MPI_COMM_WORLD); // sincroniza antes de medir inicialização
+    if (rank == 0) {
+        tInit_start = MPI_Wtime();
+    }
+
+    // Pré-computar idx_A globalmente para DP direto
+    int *idx_A_glob = (int*) malloc((size_A + 1) * sizeof(int));
+    if (!idx_A_glob) {
+        fprintf(stderr, "[rank %d] Falha ao alocar idx_A_glob\n", rank);
         MPI_Abort(MPI_COMM_WORLD, 1);
     }
+    idx_A_glob[0] = -1;
+    for (int j = 1; j <= size_A; ++j) {
+        idx_A_glob[j] = char_idx(seq_A[j-1]); // 0..3 ou -1
+    }
+
+    // Buffers para DP: prev_row e curr_row
+    mtype *rowA = (mtype*) malloc((size_A + 1) * sizeof(mtype));
+    mtype *rowB = (mtype*) malloc((size_A + 1) * sizeof(mtype));
+    if (!rowA || !rowB) {
+        fprintf(stderr, "[rank %d] Falha ao alocar rowA/rowB\n", rank);
+        MPI_Abort(MPI_COMM_WORLD, 1);
+    }
+    mtype *prev_row = rowA;
+    mtype *curr_row = rowB;
     // Inicializa prev_row[j] = 0
     for (int j = 0; j <= size_A; ++j) {
         prev_row[j] = 0;
     }
 
-    // *** Preparar arrays para Allgatherv: sendcounts e displacements
+    // Preparar arrays para Allgatherv: sendcounts e displs
     int *sendcounts = (int*) malloc(nprocs * sizeof(int));
     int *displs     = (int*) malloc(nprocs * sizeof(int));
     if (!sendcounts || !displs) {
         fprintf(stderr, "[rank %d] Falha ao alocar sendcounts/displs\n", rank);
         MPI_Abort(MPI_COMM_WORLD, 1);
     }
-    // Calcula partição estática de colunas 1..size_A entre processos
-    // Cada processo terá sendcounts[p] colunas (p.ex., local_count), e displs[p] é deslocamento em elementos
-    int base = size_A / nprocs;
-    int rem  = size_A % nprocs;
+    int base_cols = size_A / nprocs;
+    int rem_cols  = size_A % nprocs;
     int offset = 0;
     for (int p = 0; p < nprocs; ++p) {
-        int cnt = (p < rem) ? (base + 1) : base;
+        int cnt = (p < rem_cols) ? (base_cols + 1) : base_cols;
         sendcounts[p] = cnt;
-        displs[p]     = offset; // offset em unidades de mtype, mas Allgatherv exige desloc em elemento
+        displs[p]     = offset;
         offset += cnt;
     }
-    // Note: sum sendcounts[p] == size_A
+    // full_row não mais necessário se usarmos swap de rowA/rowB e Allgatherv diretamente em curr_row.
 
-    // Medição de tempo: apenas rank 0
     MPI_Barrier(MPI_COMM_WORLD);
-    double t0 = MPI_Wtime();
+    if (rank == 0) {
+        tInit_end = MPI_Wtime();
+    }
+    // -----------------------------
+    // 3) Loop principal DP: medir tempo em rank 0
+    // -----------------------------
+    MPI_Barrier(MPI_COMM_WORLD);
+    double tDP_start = 0.0, tDP_end = 0.0;
+    if (rank == 0) {
+        tDP_start = MPI_Wtime();
+    }
 
-    // Loop i = 1..size_B: iterações sobre prefixos de seq_B
+    // Loop i = 1..size_B
     for (int i = 1; i <= size_B; ++i) {
-        // prev_row[0] deve ser 0
         curr_row[0] = 0;
 
-        // Determina local_j_start e local_count usando a mesma partição
+        // partição local de colunas
         int local_count = sendcounts[rank];
-        int j_offset    = displs[rank]; // offset de 0..(size_A-1) para colunas 1..size_A
-        int local_j_start = j_offset + 1;         // índice j global inicial
-        int local_j_end   = j_offset + local_count; // índice j global final
+        int j_offset    = displs[rank];
+        int local_j_start = j_offset + 1;
+        int local_j_end   = j_offset + local_count;
 
-        unsigned char c = (unsigned char) seq_B[i-1]; // caractere atual de seq_B
+        int idx_c = char_idx(seq_B[i-1]); // 0..3 ou -1
 
-        // Computa curr_row[j] para j = local_j_start..local_j_end
-        for (int j = local_j_start; j <= local_j_end; ++j) {
-            if ((unsigned char)seq_A[j-1] == c) {
-                // match direto
-                curr_row[j] = (mtype)(prev_row[j-1] + 1);
-            } else {
-                int pos = P[c * (size_A + 1) + j]; // última ocorrência de c em seq_A até j
-                if (pos == 0) {
-                    curr_row[j] = prev_row[j];
+        // Computa curr_row[j] localmente
+        if (idx_c >= 0) {
+            // Se caractere válido, usamos P4 e idx_A_glob
+            for (int j = local_j_start; j <= local_j_end; ++j) {
+                if (idx_c == idx_A_glob[j]) {
+                    curr_row[j] = (mtype)(prev_row[j-1] + 1);
                 } else {
-                    // prev_row[pos-1] + 1 em mtype
-                    mtype v = (mtype)(prev_row[pos-1] + 1);
-                    curr_row[j] = (mtype) max(prev_row[j], v);
+                    int pos = P4[idx_c * (size_A + 1) + j];
+                    if (pos == 0) {
+                        curr_row[j] = prev_row[j];
+                    } else {
+                        mtype v = (mtype)(prev_row[pos-1] + 1);
+                        curr_row[j] = (mtype) max(prev_row[j], v);
+                    }
                 }
+            }
+        } else {
+            // Caractere inesperado: tratamos como sem match => curr_row[j] = prev_row[j]
+            for (int j = local_j_start; j <= local_j_end; ++j) {
+                curr_row[j] = prev_row[j];
             }
         }
 
-        // Agora reunimos todas as partes curr_row em full_curr_row compartilhada em cada processo.
-        // Podemos usar MPI_Allgatherv: cada processo envia curr_row[ local_j_start .. local_j_end ]
-        // Destino: buffer full_curr_row[1..size_A], index 0 deixamos =0.
-        // Para convenção, podemos usar mesmo curr_row como buffer de envio/recepção:
-        //   - Precisamos um buffer temporário full_row de mtype[size_A+1].
-        mtype *full_row = (mtype*) malloc((size_A + 1) * sizeof(mtype));
-        if (!full_row) {
-            fprintf(stderr, "[rank %d] Falha ao alocar full_row\n", rank);
-            MPI_Abort(MPI_COMM_WORLD, 1);
-        }
-        // full_row[0] = 0
-        full_row[0] = 0;
-        // MPI_Allgatherv espera ponteiro para o início do buffer local: &curr_row[local_j_start]
-        // Mas curr_row[0..size_A], offset local_j_start: index local_j_start.
+        // Allgatherv para montar a linha completa em curr_row[1..size_A]
         MPI_Allgatherv(
             /*sendbuf*/    &curr_row[local_j_start],
             /*sendcount*/  local_count,
             /*sendtype*/   MPI_UNSIGNED_SHORT,
-            /*recvbuf*/    &full_row[1],
+            /*recvbuf*/    &curr_row[1],
             /*recvcounts*/ sendcounts,
             /*displs*/     displs,
             /*recvtype*/   MPI_UNSIGNED_SHORT,
             MPI_COMM_WORLD
         );
-        // Note: full_row[1 + displs[p] .. 1 + displs[p] + sendcounts[p] - 1] receberá dados do processo p.
-        // full_row[0] já definido = 0.
+        // curr_row[1..size_A] agora contém a linha i completa; curr_row[0]=0
 
-        // Troca prev_row <-> full_row para próxima iteração
-        // Copiamos full_row em prev_row (poderíamos trocar ponteiros, mas prev_row foi alocado e usado, melhor copiar).
-        for (int j = 0; j <= size_A; ++j) {
-            prev_row[j] = full_row[j];
-        }
-        free(full_row);
-        // Passa para próxima i
+        // Swap prev_row <-> curr_row
+        mtype *tmp = prev_row;
+        prev_row = curr_row;
+        curr_row = tmp;
     }
 
     MPI_Barrier(MPI_COMM_WORLD);
-    double t1 = MPI_Wtime();
+    if (rank == 0) {
+        tDP_end = MPI_Wtime();
+    }
 
     int lcs_score = prev_row[size_A];
-
-    /* Apenas rank 0 imprime o resultado e o tempo decorrido */
     if (rank == 0) {
+        double time_P    = tP_end - tP_start;
+        double time_Init = tInit_end - tInit_start;
+        double time_DP   = tDP_end - tDP_start;
         printf("LCS = %d\n", lcs_score);
-        printf("Tempo total (MPI, P-based) : %.6f segundos\n", t1 - t0);
+        printf("Tempo de construção de P:         %.6f segundos\n", time_P);
+        printf("Tempo de inicialização (dados):   %.6f segundos\n", time_Init);
+        printf("Tempo de cálculo DP (linha-a-linha): %.6f segundos\n", time_DP);
+        printf("Tempo total (aprox., P + Init + DP): %.6f segundos\n", time_P + time_Init + time_DP);
     }
 
     // Libera recursos
-    free(prev_row);
-    free(curr_row);
-    free(P);
-    free(sendcounts);
-    free(displs);
     free(seq_A);
     free(seq_B);
+    free(P4);
+    free(idx_A_glob);
+    free(rowA);
+    free(rowB);
+    free(sendcounts);
+    free(displs);
 
     MPI_Finalize();
     return EXIT_SUCCESS;
