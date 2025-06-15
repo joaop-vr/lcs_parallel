@@ -31,11 +31,6 @@ for fileA in "${INPUT_DIR}"/*A.in; do
     numA="${baseA//[!0-9]/}"
     numB="${baseB//[!0-9]/}"
 
-    # só executa se o número for o mesmo
-    if [[ "$numA" != "$numB" ]]; then
-      continue
-    fi
-
     output_file="${OUTPUT_DIR}/output_${baseA}_${baseB}.out"
     echo "[$(date +'%H:%M:%S')] ${baseA} vs ${baseB}"
     for i in $(seq 1 21); do

@@ -28,8 +28,6 @@ $(PAR_TARGET): $(PAR_SRCS)
 	$(CC_MPI) $(CFLAGS_MPI) -o $@ $^
 
 # Regra para compilação sequencial
-sequential: sequencial
-
 sequencial: $(SEQ_TARGET)
 
 $(SEQ_TARGET): $(SEQ_SRCS)
