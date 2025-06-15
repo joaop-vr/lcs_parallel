@@ -5,7 +5,7 @@
 #SBATCH --ntasks=1             # 1 tarefa (processo)
 #SBATCH --cpus-per-task=1      # 1 CPU por tarefa
 #SBATCH --mem=4G               # memória
-#SBATCH --time=03:00:00        # tempo máximo
+#SBATCH --time=07:00:00        # tempo máximo
 #SBATCH --output=log_seq_%j.out  # arquivo de log (%j = job ID)
 
 cd $SLURM_SUBMIT_DIR
