@@ -16,7 +16,7 @@ make paralelo || { echo "Falha na compilação"; exit 1; }
 
 # 2) Diretórios
 INPUT_DIR="testes/inputs"
-OUTPUT_DIR="testes/outputs"
+OUTPUT_DIR="testes/outputs_1task"
 mkdir -p "${OUTPUT_DIR}"
 rm -f "${OUTPUT_DIR}"/output_*.out
 
