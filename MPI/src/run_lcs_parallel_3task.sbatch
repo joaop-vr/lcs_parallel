@@ -5,7 +5,7 @@
 #SBATCH --ntasks=6                 # 6 processos MPI no total
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=4G
-#SBATCH --time=07:00:00
+#SBATCH --time=12:00:00
 #SBATCH --output=log_mpi_%j.out
 
 cd $SLURM_SUBMIT_DIR
@@ -30,7 +30,6 @@ for fileA in "${INPUT_DIR}"/*A.in; do
     echo "[$(date +'%H:%M:%S')] ${baseA} vs ${baseB}" | tee -a "$output_file"
     for i in $(seq 1 21); do
       echo "--- Execução $i ---" >> "$output_file"
-      # 1 por nó: --map-by ppr:1:node garante 1 rank em cada nó
       mpirun -np 6 --map-by ppr:3:node ./lcs_mpi "$fileA" "$fileB" \
         >> "$output_file" 2>&1
     done

@@ -1,0 +1,127 @@
+[12:20:03] teste_70000A vs teste_60000B
+--- Execução 1 ---
+LCS = 39243
+Tempo de construção de P:         0.017464 segundos
+Tempo de inicialização (dados):   0.000719 segundos
+Tempo de cálculo DP (linha-a-linha): 103.018792 segundos
+Tempo total (aprox., P + Init + DP): 103.036975 segundos
+--- Execução 2 ---
+LCS = 39243
+Tempo de construção de P:         0.013194 segundos
+Tempo de inicialização (dados):   0.001087 segundos
+Tempo de cálculo DP (linha-a-linha): 102.794071 segundos
+Tempo total (aprox., P + Init + DP): 102.808352 segundos
+--- Execução 3 ---
+LCS = 39243
+Tempo de construção de P:         0.015732 segundos
+Tempo de inicialização (dados):   0.001027 segundos
+Tempo de cálculo DP (linha-a-linha): 102.988490 segundos
+Tempo total (aprox., P + Init + DP): 103.005249 segundos
+--- Execução 4 ---
+LCS = 39243
+Tempo de construção de P:         0.015416 segundos
+Tempo de inicialização (dados):   0.000729 segundos
+Tempo de cálculo DP (linha-a-linha): 102.071527 segundos
+Tempo total (aprox., P + Init + DP): 102.087671 segundos
+--- Execução 5 ---
+LCS = 39243
+Tempo de construção de P:         0.015401 segundos
+Tempo de inicialização (dados):   0.000535 segundos
+Tempo de cálculo DP (linha-a-linha): 102.983908 segundos
+Tempo total (aprox., P + Init + DP): 102.999844 segundos
+--- Execução 6 ---
+LCS = 39243
+Tempo de construção de P:         0.012842 segundos
+Tempo de inicialização (dados):   0.000946 segundos
+Tempo de cálculo DP (linha-a-linha): 101.511662 segundos
+Tempo total (aprox., P + Init + DP): 101.525451 segundos
+--- Execução 7 ---
+LCS = 39243
+Tempo de construção de P:         0.006968 segundos
+Tempo de inicialização (dados):   0.000653 segundos
+Tempo de cálculo DP (linha-a-linha): 103.365472 segundos
+Tempo total (aprox., P + Init + DP): 103.373093 segundos
+--- Execução 8 ---
+LCS = 39243
+Tempo de construção de P:         0.007091 segundos
+Tempo de inicialização (dados):   0.000627 segundos
+Tempo de cálculo DP (linha-a-linha): 101.173778 segundos
+Tempo total (aprox., P + Init + DP): 101.181497 segundos
+--- Execução 9 ---
+LCS = 39243
+Tempo de construção de P:         0.015145 segundos
+Tempo de inicialização (dados):   0.000687 segundos
+Tempo de cálculo DP (linha-a-linha): 103.082540 segundos
+Tempo total (aprox., P + Init + DP): 103.098373 segundos
+--- Execução 10 ---
+LCS = 39243
+Tempo de construção de P:         0.006917 segundos
+Tempo de inicialização (dados):   0.002634 segundos
+Tempo de cálculo DP (linha-a-linha): 102.881773 segundos
+Tempo total (aprox., P + Init + DP): 102.891324 segundos
+--- Execução 11 ---
+LCS = 39243
+Tempo de construção de P:         0.013463 segundos
+Tempo de inicialização (dados):   0.000848 segundos
+Tempo de cálculo DP (linha-a-linha): 100.371563 segundos
+Tempo total (aprox., P + Init + DP): 100.385874 segundos
+--- Execução 12 ---
+LCS = 39243
+Tempo de construção de P:         0.009623 segundos
+Tempo de inicialização (dados):   0.002781 segundos
+Tempo de cálculo DP (linha-a-linha): 104.043057 segundos
+Tempo total (aprox., P + Init + DP): 104.055461 segundos
+--- Execução 13 ---
+LCS = 39243
+Tempo de construção de P:         0.012643 segundos
+Tempo de inicialização (dados):   0.000605 segundos
+Tempo de cálculo DP (linha-a-linha): 102.085852 segundos
+Tempo total (aprox., P + Init + DP): 102.099100 segundos
+--- Execução 14 ---
+LCS = 39243
+Tempo de construção de P:         0.010412 segundos
+Tempo de inicialização (dados):   0.000515 segundos
+Tempo de cálculo DP (linha-a-linha): 103.709855 segundos
+Tempo total (aprox., P + Init + DP): 103.720782 segundos
+--- Execução 15 ---
+LCS = 39243
+Tempo de construção de P:         0.007547 segundos
+Tempo de inicialização (dados):   0.000735 segundos
+Tempo de cálculo DP (linha-a-linha): 102.647206 segundos
+Tempo total (aprox., P + Init + DP): 102.655488 segundos
+--- Execução 16 ---
+LCS = 39243
+Tempo de construção de P:         0.008355 segundos
+Tempo de inicialização (dados):   0.000518 segundos
+Tempo de cálculo DP (linha-a-linha): 103.535613 segundos
+Tempo total (aprox., P + Init + DP): 103.544487 segundos
+--- Execução 17 ---
+LCS = 39243
+Tempo de construção de P:         0.015332 segundos
+Tempo de inicialização (dados):   0.000683 segundos
+Tempo de cálculo DP (linha-a-linha): 103.309626 segundos
+Tempo total (aprox., P + Init + DP): 103.325641 segundos
+--- Execução 18 ---
+LCS = 39243
+Tempo de construção de P:         0.011580 segundos
+Tempo de inicialização (dados):   0.000491 segundos
+Tempo de cálculo DP (linha-a-linha): 102.511391 segundos
+Tempo total (aprox., P + Init + DP): 102.523462 segundos
+--- Execução 19 ---
+LCS = 39243
+Tempo de construção de P:         0.015391 segundos
+Tempo de inicialização (dados):   0.001327 segundos
+Tempo de cálculo DP (linha-a-linha): 103.055149 segundos
+Tempo total (aprox., P + Init + DP): 103.071867 segundos
+--- Execução 20 ---
+LCS = 39243
+Tempo de construção de P:         0.007913 segundos
+Tempo de inicialização (dados):   0.000625 segundos
+Tempo de cálculo DP (linha-a-linha): 103.431486 segundos
+Tempo total (aprox., P + Init + DP): 103.440024 segundos
+--- Execução 21 ---
+LCS = 39243
+Tempo de construção de P:         0.008047 segundos
+Tempo de inicialização (dados):   0.000698 segundos
+Tempo de cálculo DP (linha-a-linha): 102.923637 segundos
+Tempo total (aprox., P + Init + DP): 102.932382 segundos
