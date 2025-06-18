@@ -1,0 +1,127 @@
+[21:52:28] teste_50000A vs teste_70000B
+--- Execução 1 ---
+LCS = 35685
+Tempo de construção de P:         0.025495 segundos
+Tempo de inicialização (dados):   18.722455 segundos
+Tempo de cálculo DP (wavefront):  17.692375 segundos
+Tempo total (aprox.):             36.440325 segundos
+--- Execução 2 ---
+LCS = 35685
+Tempo de construção de P:         0.020825 segundos
+Tempo de inicialização (dados):   18.037856 segundos
+Tempo de cálculo DP (wavefront):  17.025461 segundos
+Tempo total (aprox.):             35.084143 segundos
+--- Execução 3 ---
+LCS = 35685
+Tempo de construção de P:         0.026079 segundos
+Tempo de inicialização (dados):   18.622863 segundos
+Tempo de cálculo DP (wavefront):  17.614249 segundos
+Tempo total (aprox.):             36.263191 segundos
+--- Execução 4 ---
+LCS = 35685
+Tempo de construção de P:         0.030093 segundos
+Tempo de inicialização (dados):   18.928131 segundos
+Tempo de cálculo DP (wavefront):  17.928616 segundos
+Tempo total (aprox.):             36.886839 segundos
+--- Execução 5 ---
+LCS = 35685
+Tempo de construção de P:         0.025455 segundos
+Tempo de inicialização (dados):   17.468393 segundos
+Tempo de cálculo DP (wavefront):  16.483380 segundos
+Tempo total (aprox.):             33.977228 segundos
+--- Execução 6 ---
+LCS = 35685
+Tempo de construção de P:         0.018339 segundos
+Tempo de inicialização (dados):   16.695476 segundos
+Tempo de cálculo DP (wavefront):  15.662220 segundos
+Tempo total (aprox.):             32.376035 segundos
+--- Execução 7 ---
+LCS = 35685
+Tempo de construção de P:         0.019071 segundos
+Tempo de inicialização (dados):   15.616173 segundos
+Tempo de cálculo DP (wavefront):  14.628693 segundos
+Tempo total (aprox.):             30.263937 segundos
+--- Execução 8 ---
+LCS = 35685
+Tempo de construção de P:         0.024027 segundos
+Tempo de inicialização (dados):   17.705461 segundos
+Tempo de cálculo DP (wavefront):  16.721444 segundos
+Tempo total (aprox.):             34.450933 segundos
+--- Execução 9 ---
+LCS = 35685
+Tempo de construção de P:         0.024441 segundos
+Tempo de inicialização (dados):   17.035876 segundos
+Tempo de cálculo DP (wavefront):  16.003275 segundos
+Tempo total (aprox.):             33.063592 segundos
+--- Execução 10 ---
+LCS = 35685
+Tempo de construção de P:         0.025564 segundos
+Tempo de inicialização (dados):   18.706747 segundos
+Tempo de cálculo DP (wavefront):  17.737951 segundos
+Tempo total (aprox.):             36.470261 segundos
+--- Execução 11 ---
+LCS = 35685
+Tempo de construção de P:         0.014145 segundos
+Tempo de inicialização (dados):   18.584028 segundos
+Tempo de cálculo DP (wavefront):  17.602464 segundos
+Tempo total (aprox.):             36.200637 segundos
+--- Execução 12 ---
+LCS = 35685
+Tempo de construção de P:         0.026570 segundos
+Tempo de inicialização (dados):   15.651949 segundos
+Tempo de cálculo DP (wavefront):  14.650408 segundos
+Tempo total (aprox.):             30.328927 segundos
+--- Execução 13 ---
+LCS = 35685
+Tempo de construção de P:         0.023288 segundos
+Tempo de inicialização (dados):   23.446311 segundos
+Tempo de cálculo DP (wavefront):  22.443503 segundos
+Tempo total (aprox.):             45.913102 segundos
+--- Execução 14 ---
+LCS = 35685
+Tempo de construção de P:         0.020448 segundos
+Tempo de inicialização (dados):   17.318277 segundos
+Tempo de cálculo DP (wavefront):  16.297661 segundos
+Tempo total (aprox.):             33.636385 segundos
+--- Execução 15 ---
+LCS = 35685
+Tempo de construção de P:         0.024940 segundos
+Tempo de inicialização (dados):   14.448631 segundos
+Tempo de cálculo DP (wavefront):  13.450932 segundos
+Tempo total (aprox.):             27.924502 segundos
+--- Execução 16 ---
+LCS = 35685
+Tempo de construção de P:         0.012134 segundos
+Tempo de inicialização (dados):   16.522516 segundos
+Tempo de cálculo DP (wavefront):  15.517316 segundos
+Tempo total (aprox.):             32.051966 segundos
+--- Execução 17 ---
+LCS = 35685
+Tempo de construção de P:         0.024075 segundos
+Tempo de inicialização (dados):   14.749161 segundos
+Tempo de cálculo DP (wavefront):  13.757136 segundos
+Tempo total (aprox.):             28.530372 segundos
+--- Execução 18 ---
+LCS = 35685
+Tempo de construção de P:         0.018881 segundos
+Tempo de inicialização (dados):   14.687746 segundos
+Tempo de cálculo DP (wavefront):  13.692737 segundos
+Tempo total (aprox.):             28.399364 segundos
+--- Execução 19 ---
+LCS = 35685
+Tempo de construção de P:         0.024114 segundos
+Tempo de inicialização (dados):   18.419078 segundos
+Tempo de cálculo DP (wavefront):  17.428534 segundos
+Tempo total (aprox.):             35.871726 segundos
+--- Execução 20 ---
+LCS = 35685
+Tempo de construção de P:         0.018006 segundos
+Tempo de inicialização (dados):   16.773306 segundos
+Tempo de cálculo DP (wavefront):  15.788836 segundos
+Tempo total (aprox.):             32.580149 segundos
+--- Execução 21 ---
+LCS = 35685
+Tempo de construção de P:         0.028535 segundos
+Tempo de inicialização (dados):   17.901142 segundos
+Tempo de cálculo DP (wavefront):  16.868140 segundos
+Tempo total (aprox.):             34.797816 segundos

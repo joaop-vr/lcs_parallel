@@ -1,0 +1,38 @@
+[19:09:41] teste_50000A vs teste_50000B
+--- Execução 1 ---
+LCS = 32689
+Tempo de construção de P:         0.016242 segundos
+Tempo de inicialização (dados):   0.000720 segundos
+Tempo de cálculo DP (linha-a-linha): 71.307396 segundos
+Tempo total (aprox., P + Init + DP): 71.324357 segundos
+--- Execução 2 ---
+LCS = 32689
+Tempo de construção de P:         0.015952 segundos
+Tempo de inicialização (dados):   0.000659 segundos
+Tempo de cálculo DP (linha-a-linha): 68.750083 segundos
+Tempo total (aprox., P + Init + DP): 68.766694 segundos
+--- Execução 3 ---
+LCS = 32689
+Tempo de construção de P:         0.012881 segundos
+Tempo de inicialização (dados):   0.000546 segundos
+Tempo de cálculo DP (linha-a-linha): 71.258657 segundos
+Tempo total (aprox., P + Init + DP): 71.272084 segundos
+--- Execução 4 ---
+LCS = 32689
+Tempo de construção de P:         0.019059 segundos
+Tempo de inicialização (dados):   0.000736 segundos
+Tempo de cálculo DP (linha-a-linha): 69.076218 segundos
+Tempo total (aprox., P + Init + DP): 69.096013 segundos
+--- Execução 5 ---
+LCS = 32689
+Tempo de construção de P:         0.019129 segundos
+Tempo de inicialização (dados):   0.000683 segundos
+Tempo de cálculo DP (linha-a-linha): 70.259695 segundos
+Tempo total (aprox., P + Init + DP): 70.279507 segundos
+--- Execução 6 ---
+LCS = 32689
+Tempo de construção de P:         0.011205 segundos
+Tempo de inicialização (dados):   0.000548 segundos
+Tempo de cálculo DP (linha-a-linha): 71.354513 segundos
+Tempo total (aprox., P + Init + DP): 71.366266 segundos
+--- Execução 7 ---

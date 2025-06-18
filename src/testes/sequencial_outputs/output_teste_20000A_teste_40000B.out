@@ -1,0 +1,147 @@
+--- Execução 1 ---
+Tempos (segundos):
+  alocação+init: 0.145154
+  LCS compute : 8.804154
+  tempo total : 9.092707
+Score: 17495
+
+--- Execução 2 ---
+Tempos (segundos):
+  alocação+init: 0.152821
+  LCS compute : 8.810577
+  tempo total : 9.116952
+Score: 17495
+
+--- Execução 3 ---
+Tempos (segundos):
+  alocação+init: 0.154152
+  LCS compute : 8.601987
+  tempo total : 8.892385
+Score: 17495
+
+--- Execução 4 ---
+Tempos (segundos):
+  alocação+init: 0.161710
+  LCS compute : 8.709737
+  tempo total : 9.023275
+Score: 17495
+
+--- Execução 5 ---
+Tempos (segundos):
+  alocação+init: 0.156203
+  LCS compute : 8.712299
+  tempo total : 9.020486
+Score: 17495
+
+--- Execução 6 ---
+Tempos (segundos):
+  alocação+init: 0.153279
+  LCS compute : 8.733844
+  tempo total : 9.035275
+Score: 17495
+
+--- Execução 7 ---
+Tempos (segundos):
+  alocação+init: 0.160757
+  LCS compute : 8.587179
+  tempo total : 8.888784
+Score: 17495
+
+--- Execução 8 ---
+Tempos (segundos):
+  alocação+init: 0.121174
+  LCS compute : 8.720100
+  tempo total : 8.991325
+Score: 17495
+
+--- Execução 9 ---
+Tempos (segundos):
+  alocação+init: 0.150309
+  LCS compute : 8.928269
+  tempo total : 9.230447
+Score: 17495
+
+--- Execução 10 ---
+Tempos (segundos):
+  alocação+init: 0.153719
+  LCS compute : 8.884824
+  tempo total : 9.177658
+Score: 17495
+
+--- Execução 11 ---
+Tempos (segundos):
+  alocação+init: 0.162214
+  LCS compute : 8.976684
+  tempo total : 9.276494
+Score: 17495
+
+--- Execução 12 ---
+Tempos (segundos):
+  alocação+init: 0.145163
+  LCS compute : 8.790893
+  tempo total : 9.089145
+Score: 17495
+
+--- Execução 13 ---
+Tempos (segundos):
+  alocação+init: 0.156559
+  LCS compute : 8.836145
+  tempo total : 9.137680
+Score: 17495
+
+--- Execução 14 ---
+Tempos (segundos):
+  alocação+init: 0.141260
+  LCS compute : 8.964590
+  tempo total : 9.258737
+Score: 17495
+
+--- Execução 15 ---
+Tempos (segundos):
+  alocação+init: 0.148981
+  LCS compute : 8.806519
+  tempo total : 9.106840
+Score: 17495
+
+--- Execução 16 ---
+Tempos (segundos):
+  alocação+init: 0.155437
+  LCS compute : 8.959498
+  tempo total : 9.258701
+Score: 17495
+
+--- Execução 17 ---
+Tempos (segundos):
+  alocação+init: 0.132505
+  LCS compute : 8.898789
+  tempo total : 9.184070
+Score: 17495
+
+--- Execução 18 ---
+Tempos (segundos):
+  alocação+init: 0.151428
+  LCS compute : 9.007227
+  tempo total : 9.309293
+Score: 17495
+
+--- Execução 19 ---
+Tempos (segundos):
+  alocação+init: 0.156256
+  LCS compute : 8.790565
+  tempo total : 9.099103
+Score: 17495
+
+--- Execução 20 ---
+Tempos (segundos):
+  alocação+init: 0.156263
+  LCS compute : 8.652901
+  tempo total : 8.954692
+Score: 17495
+
+--- Execução 21 ---
+Tempos (segundos):
+  alocação+init: 0.154881
+  LCS compute : 8.836400
+  tempo total : 9.142877
+Score: 17495
+

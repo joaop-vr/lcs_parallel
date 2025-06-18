@@ -216,25 +216,26 @@ int main(int argc, char *argv[]) {
         tDP_start = MPI_Wtime();
     }
 
+    // Loop i = 1..size_B
     for (int i = 1; i <= size_B; ++i) {
         curr_row[0] = 0;
+
+        // partição local de colunas
         int local_count = sendcounts[rank];
-        int j_offset = displs[rank];
+        int j_offset    = displs[rank];
         int local_j_start = j_offset + 1;
-        int local_j_end = j_offset + local_count;
+        int local_j_end   = j_offset + local_count;
 
-        int idx_c = char_idx(seq_B[i-1]);
-        int *P4_row = NULL;  // Ponteiro para a linha de P4 do caractere atual
-        if (idx_c >= 0) {
-            P4_row = P4 + idx_c * (size_A + 1);  // Pré-computação eficiente
-        }
+        int idx_c = char_idx(seq_B[i-1]); // 0..3 ou -1
 
+        // Computa curr_row[j] localmente
         if (idx_c >= 0) {
+            // Se caractere válido, usamos P4 e idx_A_glob
             for (int j = local_j_start; j <= local_j_end; ++j) {
                 if (idx_c == idx_A_glob[j]) {
                     curr_row[j] = (mtype)(prev_row[j-1] + 1);
                 } else {
-                    int pos = P4_row[j];  // Acesso direto (sem cálculo de índice)
+                    int pos = P4[idx_c * (size_A + 1) + j];
                     if (pos == 0) {
                         curr_row[j] = prev_row[j];
                     } else {
@@ -244,18 +245,26 @@ int main(int argc, char *argv[]) {
                 }
             }
         } else {
+            // Caractere inesperado: tratamos como sem match => curr_row[j] = prev_row[j]
             for (int j = local_j_start; j <= local_j_end; ++j) {
                 curr_row[j] = prev_row[j];
             }
         }
 
+        // Allgatherv para montar a linha completa em curr_row[1..size_A]
         MPI_Allgatherv(
-            &curr_row[local_j_start], local_count, MPI_UNSIGNED_SHORT,
-            &curr_row[1], sendcounts, displs, MPI_UNSIGNED_SHORT,
+            /*sendbuf*/    &curr_row[local_j_start],
+            /*sendcount*/  local_count,
+            /*sendtype*/   MPI_UNSIGNED_SHORT,
+            /*recvbuf*/    &curr_row[1],
+            /*recvcounts*/ sendcounts,
+            /*displs*/     displs,
+            /*recvtype*/   MPI_UNSIGNED_SHORT,
             MPI_COMM_WORLD
         );
+        // curr_row[1..size_A] agora contém a linha i completa; curr_row[0]=0
 
-        // Swap das linhas
+        // Swap prev_row <-> curr_row
         mtype *tmp = prev_row;
         prev_row = curr_row;
         curr_row = tmp;

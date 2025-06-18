@@ -1,0 +1,5 @@
+=== Compilando lcs_mpi ===
+make: Nothing to be done for 'paralelo'.
+[21:39:48] teste_10000A vs teste_10000B
+[21:40:18] teste_10000A vs teste_20000B
+slurmstepd-node0: error: *** JOB 6505 ON node0 CANCELLED AT 2025-06-18T21:40:32 ***
