@@ -13,7 +13,7 @@ cd $SLURM_SUBMIT_DIR
 echo "=== Compilando lcs_mpi ==="
 make paralelo || { echo "Falha na compilação"; exit 1; }
 
-INPUT_DIR="testes/inputs_resumidos"
+INPUT_DIR="testes/srcc"
 OUTPUT_DIR="testes/outputs_4tasks"
 mkdir -p "${OUTPUT_DIR}"
 rm -f "${OUTPUT_DIR}"/output_*.out

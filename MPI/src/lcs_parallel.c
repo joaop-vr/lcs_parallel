@@ -9,7 +9,6 @@
 
 typedef unsigned short mtype;
 
-/* Mapeia A,C,G,T para 0..3; retorna -1 se outro char */
 static inline int char_idx(char c) {
     switch(c) {
         case 'A': return 0;
@@ -20,10 +19,6 @@ static inline int char_idx(char c) {
     }
 }
 
-/* 
- * Função para ler arquivos com as sequências (cada linha, retirando '\n' e '\r')
- * Apenas o processo rank 0 lê do disco; depois a string será broadcasted.
- */
 char* read_seq(const char *fname, int *out_len) {
     FILE *fseq = fopen(fname, "rt");
     if (!fseq) {
@@ -69,17 +64,14 @@ int main(int argc, char *argv[]) {
     char *seq_A = NULL, *seq_B = NULL;
     int size_A = 0, size_B = 0;
 
-    /* Processo 0 lê as duas sequências e obtém seus tamanhos */
     if (rank == 0) {
         seq_A = read_seq(argv[1], &size_A);
         seq_B = read_seq(argv[2], &size_B);
     }
 
-    /* Broadcast do tamanho das sequências para todos os ranks */
     MPI_Bcast(&size_A, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(&size_B, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-    /* Agora todos os ranks sabem size_A e size_B; alocam espaço para armazenar as strings */
     if (rank != 0) {
         seq_A = (char*) malloc((size_A + 1) * sizeof(char));
         seq_B = (char*) malloc((size_B + 1) * sizeof(char));
@@ -89,32 +81,23 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    /* Broadcast das próprias sequências (incluindo o '\0' no final) */
     MPI_Bcast(seq_A, size_A + 1, MPI_CHAR, 0, MPI_COMM_WORLD);
     MPI_Bcast(seq_B, size_B + 1, MPI_CHAR, 0, MPI_COMM_WORLD);
 
-    // -----------------------------
-    // 1) Construção da tabela P4
-    // -----------------------------
-    // Medição de tempo apenas em rank 0:
+    // 1. Construção da tabela P4
     double tP_start = 0.0, tP_end = 0.0;
-    if (rank == 0) {
-        tP_start = MPI_Wtime();
+    if (rank == 0) tP_start = MPI_Wtime();
+
+    int *P4 = (int*) malloc(4 * (size_A + 1) * sizeof(int));
+    if (!P4) {
+        fprintf(stderr, "[rank %d] Falha ao alocar P4 table\n", rank);
+        MPI_Abort(MPI_COMM_WORLD, 1);
     }
 
-    int *P4 = NULL;
     if (rank == 0) {
-        // Aloca P4[4][size_A+1]
-        P4 = (int*) malloc(4 * (size_A + 1) * sizeof(int));
-        if (!P4) {
-            fprintf(stderr, "[rank %d] Falha ao alocar P4 table\n", rank);
-            MPI_Abort(MPI_COMM_WORLD, 1);
-        }
-        // Inicializa P4[idx][0] = 0 para idx=0..3
         for (int idx = 0; idx < 4; ++idx) {
             P4[idx * (size_A + 1) + 0] = 0;
         }
-        // (Opcional: construir idx_A para acelerar char_idx de seq_A)
         int *idx_A = (int*) malloc((size_A + 1) * sizeof(int));
         if (!idx_A) {
             fprintf(stderr, "[rank %d] Falha ao alocar idx_A\n", rank);
@@ -124,9 +107,8 @@ int main(int argc, char *argv[]) {
         for (int j = 1; j <= size_A; ++j) {
             idx_A[j] = char_idx(seq_A[j-1]);
         }
-        // Preenche para j = 1..size_A
         for (int j = 1; j <= size_A; ++j) {
-            int idx_here = idx_A[j]; // 0..3 ou -1
+            int idx_here = idx_A[j];
             for (int idx = 0; idx < 4; ++idx) {
                 if (idx == idx_here) {
                     P4[idx * (size_A + 1) + j] = j;
@@ -136,158 +118,336 @@ int main(int argc, char *argv[]) {
             }
         }
         free(idx_A);
-    } else {
-        // Aloca espaço para receber P4 via broadcast
-        P4 = (int*) malloc(4 * (size_A + 1) * sizeof(int));
-        if (!P4) {
-            fprintf(stderr, "[rank %d] Falha ao alocar P4 table (receptor)\n", rank);
+    }
+
+    MPI_Bcast(P4, 4 * (size_A + 1), MPI_INT, 0, MPI_COMM_WORLD);
+    if (rank == 0) tP_end = MPI_Wtime();
+
+    // 2. Configuração do grid 2D
+    double tInit_start = 0.0, tInit_end = 0.0;
+    MPI_Barrier(MPI_COMM_WORLD);
+    if (rank == 0) tInit_start = MPI_Wtime();
+
+    int dims[2] = {0, 0};
+    MPI_Dims_create(nprocs, 2, dims);
+    int periods[2] = {0, 0};
+    MPI_Comm grid_comm;
+    MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, 0, &grid_comm);
+    
+    int grid_rank;
+    MPI_Comm_rank(grid_comm, &grid_rank);
+    int coords[2];
+    MPI_Cart_coords(grid_comm, grid_rank, 2, coords);
+    int pi = coords[0], pj = coords[1];
+    
+    // Divisão das sequências
+    int block_size_i = (size_B + dims[0] - 1) / dims[0];
+    int block_size_j = (size_A + dims[1] - 1) / dims[1];
+    
+    int start_i = pi * block_size_i;
+    int end_i = (pi == dims[0]-1) ? size_B : (pi+1) * block_size_i;
+    int size_i = end_i - start_i;
+    
+    int start_j = pj * block_size_j;
+    int end_j = (pj == dims[1]-1) ? size_A : (pj+1) * block_size_j;
+    int size_j = end_j - start_j;
+    
+    // Alocação do bloco local
+    mtype **local_block = NULL;  // DECLARE local_block
+    local_block = (mtype**) malloc((size_i+1) * sizeof(mtype*));
+    if (!local_block) {
+        fprintf(stderr, "[rank %d] Falha ao alocar local_block\n", rank);
+        MPI_Abort(MPI_COMM_WORLD, 1);
+    }
+    for (int i = 0; i <= size_i; i++) {
+        local_block[i] = (mtype*) calloc(size_j+1, sizeof(mtype));
+        if (!local_block[i]) {
+            fprintf(stderr, "[rank %d] Falha ao alocar linha %d do bloco local\n", rank, i);
             MPI_Abort(MPI_COMM_WORLD, 1);
         }
     }
-    // Broadcast de P4 para todos
-    MPI_Bcast(P4, 4 * (size_A + 1), MPI_INT, 0, MPI_COMM_WORLD);
 
-    if (rank == 0) {
-        tP_end = MPI_Wtime();
-    }
-    // -----------------------------
-    // 2) Inicialização de outras estruturas
-    // -----------------------------
-    // Medição de tempo em rank 0:
-    double tInit_start = 0.0, tInit_end = 0.0;
-    MPI_Barrier(MPI_COMM_WORLD); // sincroniza antes de medir inicialização
-    if (rank == 0) {
-        tInit_start = MPI_Wtime();
-    }
-
-    // Pré-computar idx_A globalmente para DP direto
-    int *idx_A_glob = (int*) malloc((size_A + 1) * sizeof(int));
-    if (!idx_A_glob) {
-        fprintf(stderr, "[rank %d] Falha ao alocar idx_A_glob\n", rank);
+    // Buffers para comunicação
+    mtype *top_border = NULL, *left_border = NULL;
+    top_border = (mtype*) calloc(size_j+1, sizeof(mtype));
+    if (!top_border) {
+        fprintf(stderr, "[rank %d] Falha ao alocar top_border\n", rank);
         MPI_Abort(MPI_COMM_WORLD, 1);
     }
-    idx_A_glob[0] = -1;
-    for (int j = 1; j <= size_A; ++j) {
-        idx_A_glob[j] = char_idx(seq_A[j-1]); // 0..3 ou -1
-    }
 
-    // Buffers para DP: prev_row e curr_row
-    mtype *rowA = (mtype*) malloc((size_A + 1) * sizeof(mtype));
-    mtype *rowB = (mtype*) malloc((size_A + 1) * sizeof(mtype));
-    if (!rowA || !rowB) {
-        fprintf(stderr, "[rank %d] Falha ao alocar rowA/rowB\n", rank);
+    left_border = (mtype*) calloc(size_i+1, sizeof(mtype));
+    if (!left_border) {
+        fprintf(stderr, "[rank %d] Falha ao alocar left_border\n", rank);
         MPI_Abort(MPI_COMM_WORLD, 1);
     }
-    mtype *prev_row = rowA;
-    mtype *curr_row = rowB;
-    // Inicializa prev_row[j] = 0
-    for (int j = 0; j <= size_A; ++j) {
-        prev_row[j] = 0;
-    }
+    mtype top_left_corner = 0;
+    
+    // Tags para comunicação interna DP
+    #define TOP_TAG 0
+    #define LEFT_TAG 1
+    #define CORNER_TAG 2
 
-    // Preparar arrays para Allgatherv: sendcounts e displs
-    int *sendcounts = (int*) malloc(nprocs * sizeof(int));
-    int *displs     = (int*) malloc(nprocs * sizeof(int));
-    if (!sendcounts || !displs) {
-        fprintf(stderr, "[rank %d] Falha ao alocar sendcounts/displs\n", rank);
-        MPI_Abort(MPI_COMM_WORLD, 1);
-    }
-    int base_cols = size_A / nprocs;
-    int rem_cols  = size_A % nprocs;
-    int offset = 0;
-    for (int p = 0; p < nprocs; ++p) {
-        int cnt = (p < rem_cols) ? (base_cols + 1) : base_cols;
-        sendcounts[p] = cnt;
-        displs[p]     = offset;
-        offset += cnt;
-    }
-    // full_row não mais necessário se usarmos swap de rowA/rowB e Allgatherv diretamente em curr_row.
-
+    // Wavefront calculation
     MPI_Barrier(MPI_COMM_WORLD);
-    if (rank == 0) {
-        tInit_end = MPI_Wtime();
-    }
-    // -----------------------------
-    // 3) Loop principal DP: medir tempo em rank 0
-    // -----------------------------
-    MPI_Barrier(MPI_COMM_WORLD);
+    if (rank == 0) tInit_end = MPI_Wtime();
+    
     double tDP_start = 0.0, tDP_end = 0.0;
-    if (rank == 0) {
-        tDP_start = MPI_Wtime();
-    }
+    if (rank == 0) tDP_start = MPI_Wtime();
 
-    for (int i = 1; i <= size_B; ++i) {
-        curr_row[0] = 0;
-        int local_count = sendcounts[rank];
-        int j_offset = displs[rank];
-        int local_j_start = j_offset + 1;
-        int local_j_end = j_offset + local_count;
+    for (int wave = 0; wave < dims[0] + dims[1] - 1; wave++) {
+        for (int i = 0; i < dims[0]; i++) {
+            for (int j = 0; j < dims[1]; j++) {
+                if (pi + pj == wave && pi == i && pj == j) {
+                    // Receber bordas
+                    if (pi > 0) {
+                        int top_coords[2] = {pi-1, pj};
+                        int top_rank;
+                        MPI_Cart_rank(grid_comm, top_coords, &top_rank);
+                        MPI_Recv(top_border, size_j+1, MPI_UNSIGNED_SHORT, 
+                                 top_rank, TOP_TAG, grid_comm, MPI_STATUS_IGNORE);
+                    }
+                    
+                    if (pj > 0) {
+                        int left_coords[2] = {pi, pj-1};
+                        int left_rank;
+                        MPI_Cart_rank(grid_comm, left_coords, &left_rank);
+                        MPI_Recv(left_border, size_i+1, MPI_UNSIGNED_SHORT, 
+                                 left_rank, LEFT_TAG, grid_comm, MPI_STATUS_IGNORE);
+                    }
+                    
+                    if (pi > 0 && pj > 0) {
+                        int corner_coords[2] = {pi-1, pj-1};
+                        int corner_rank;
+                        MPI_Cart_rank(grid_comm, corner_coords, &corner_rank);
+                        MPI_Recv(&top_left_corner, 1, MPI_UNSIGNED_SHORT, 
+                                 corner_rank, CORNER_TAG, grid_comm, MPI_STATUS_IGNORE);
+                    }
 
-        int idx_c = char_idx(seq_B[i-1]);
-        int *P4_row = NULL;  // Ponteiro para a linha de P4 do caractere atual
-        if (idx_c >= 0) {
-            P4_row = P4 + idx_c * (size_A + 1);  // Pré-computação eficiente
-        }
-
-        if (idx_c >= 0) {
-            for (int j = local_j_start; j <= local_j_end; ++j) {
-                if (idx_c == idx_A_glob[j]) {
-                    curr_row[j] = (mtype)(prev_row[j-1] + 1);
-                } else {
-                    int pos = P4_row[j];  // Acesso direto (sem cálculo de índice)
-                    if (pos == 0) {
-                        curr_row[j] = prev_row[j];
+                    // Inicializar bordas do bloco
+                    if (pi == 0 && pj == 0) {
+                        for (int jj = 0; jj <= size_j; jj++) local_block[0][jj] = 0;
+                        for (int ii = 0; ii <= size_i; ii++) local_block[ii][0] = 0;
                     } else {
-                        mtype v = (mtype)(prev_row[pos-1] + 1);
-                        curr_row[j] = (mtype) max(prev_row[j], v);
+                        if (pi > 0) {
+                            for (int jj = 0; jj <= size_j; jj++) local_block[0][jj] = top_border[jj];
+                        } else {
+                            for (int jj = 0; jj <= size_j; jj++) local_block[0][jj] = 0;
+                        }
+                        if (pj > 0) {
+                            for (int ii = 0; ii <= size_i; ii++) local_block[ii][0] = left_border[ii];
+                        } else {
+                            for (int ii = 0; ii <= size_i; ii++) local_block[ii][0] = 0;
+                        }
+                        if (pi > 0 && pj > 0) {
+                            local_block[0][0] = top_left_corner;
+                        }
+                    }
+
+                    // Calcular bloco
+                    for (int ii = 1; ii <= size_i; ii++) {
+                        int global_i = start_i + ii;
+                        int idx_c = char_idx(seq_B[global_i-1]);
+                        
+                        for (int jj = 1; jj <= size_j; jj++) {
+                            int global_j = start_j + jj;
+                            
+                            if (seq_A[global_j-1] == seq_B[global_i-1]) {
+                                local_block[ii][jj] = local_block[ii-1][jj-1] + 1;
+                            } else {
+                                if (idx_c >= 0) {
+                                    int pos = P4[idx_c * (size_A + 1) + global_j];
+                                    mtype v = 0;
+                                    if (pos > 0 && pos-1 >= start_j && pos-1 < end_j) {
+                                        int local_col = pos - 1 - start_j;
+                                        v = local_block[ii-1][local_col] + 1;
+                                    }
+                                    local_block[ii][jj] = max(local_block[ii-1][jj], 
+                                                            max(local_block[ii][jj-1], v));
+                                } else {
+                                    local_block[ii][jj] = max(local_block[ii-1][jj], local_block[ii][jj-1]);
+                                }
+                            }
+                        }
+                    }
+
+                    // Enviar bordas
+                    if (pi < dims[0]-1) {
+                        int bottom_coords[2] = {pi+1, pj};
+                        int bottom_rank;
+                        MPI_Cart_rank(grid_comm, bottom_coords, &bottom_rank);
+                        MPI_Send(local_block[size_i], size_j+1, MPI_UNSIGNED_SHORT, 
+                                bottom_rank, TOP_TAG, grid_comm);
+                    }
+                    
+                    if (pj < dims[1]-1) {
+                        int right_coords[2] = {pi, pj+1};
+                        int right_rank;
+                        MPI_Cart_rank(grid_comm, right_coords, &right_rank);
+                        mtype *right_border = (mtype*) malloc((size_i+1) * sizeof(mtype));
+                        if (!right_border) {
+                            fprintf(stderr, "[rank %d] Falha ao alocar right_border\n", rank);
+                            MPI_Abort(MPI_COMM_WORLD, 1);
+                        }
+                        for (int ii = 0; ii <= size_i; ii++) {
+                            right_border[ii] = local_block[ii][size_j];
+                        }
+                        MPI_Send(right_border, size_i+1, MPI_UNSIGNED_SHORT, 
+                                right_rank, LEFT_TAG, grid_comm);
+                        free(right_border);
+                    }
+                    
+                    if (pi < dims[0]-1 && pj < dims[1]-1) {
+                        int bottom_right_coords[2] = {pi+1, pj+1};
+                        int bottom_right_rank;
+                        MPI_Cart_rank(grid_comm, bottom_right_coords, &bottom_right_rank);
+                        mtype corner = local_block[size_i][size_j];
+                        MPI_Send(&corner, 1, MPI_UNSIGNED_SHORT, 
+                                bottom_right_rank, CORNER_TAG, grid_comm);
                     }
                 }
             }
-        } else {
-            for (int j = local_j_start; j <= local_j_end; ++j) {
-                curr_row[j] = prev_row[j];
-            }
         }
-
-        MPI_Allgatherv(
-            &curr_row[local_j_start], local_count, MPI_UNSIGNED_SHORT,
-            &curr_row[1], sendcounts, displs, MPI_UNSIGNED_SHORT,
-            MPI_COMM_WORLD
-        );
-
-        // Swap das linhas
-        mtype *tmp = prev_row;
-        prev_row = curr_row;
-        curr_row = tmp;
     }
 
     MPI_Barrier(MPI_COMM_WORLD);
+    if (rank == 0) tDP_end = MPI_Wtime();
+
+    // =======================================================================
+    // NOVA SEÇÃO: Coleta da matriz completa e reconstrução da subsequência
+    // =======================================================================
+    // Adicione uma barreira para garantir que todos terminaram DP
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    double tCollect_start = 0.0, tCollect_end = 0.0;
+    int global_lcs = 0;
+    
+    // Coleta do resultado final (comprimento)
+    if (pi == dims[0]-1 && pj == dims[1]-1) {
+        global_lcs = local_block[size_i][size_j];
+    }
+    int bottom_right_coords2[2] = {dims[0]-1, dims[1]-1};
+    int bottom_right_rank2;
+    MPI_Cart_rank(grid_comm, bottom_right_coords2, &bottom_right_rank2);
+    MPI_Bcast(&global_lcs, 1, MPI_INT, bottom_right_rank2, grid_comm);
+
     if (rank == 0) {
-        tDP_end = MPI_Wtime();
+        tCollect_start = MPI_Wtime();
     }
 
-    int lcs_score = prev_row[size_A];
+    // Alocação da matriz completa no processo 0
+    mtype* full_matrix = NULL;
     if (rank == 0) {
-        double time_P    = tP_end - tP_start;
-        double time_Init = tInit_end - tInit_start;
-        double time_DP   = tDP_end - tDP_start;
-        printf("LCS = %d\n", lcs_score);
-        printf("Tempo de construção de P:         %.6f segundos\n", time_P);
-        printf("Tempo de inicialização (dados):   %.6f segundos\n", time_Init);
-        printf("Tempo de cálculo DP (linha-a-linha): %.6f segundos\n", time_DP);
-        printf("Tempo total (aprox., P + Init + DP): %.6f segundos\n", time_P + time_Init + time_DP);
+        full_matrix = (mtype*) malloc((size_B+1) * (size_A+1) * sizeof(mtype));
+        if (!full_matrix) {
+            fprintf(stderr, "[rank 0] Falha ao alocar full_matrix\n");
+            MPI_Abort(MPI_COMM_WORLD, 1);
+        }
+        // Opcional: inicializa em zero (não estritamente necessário se preencher tudo)
+        for (int i = 0; i <= size_B; i++) {
+            for (int j = 0; j <= size_A; j++) {
+                full_matrix[i*(size_A+1) + j] = 0;
+            }
+        }
     }
 
-    // Libera recursos
+    // Definir tags para metadados e dados
+    #define TAG_META 100
+    #define TAG_BLOCK 101
+
+    // Rank 0 copia seu próprio bloco local diretamente:
+    if (rank == 0) {
+        for (int i_loc = 0; i_loc <= size_i; i_loc++) {
+            int gi = start_i + i_loc;
+            for (int j_loc = 0; j_loc <= size_j; j_loc++) {
+                int gj = start_j + j_loc;
+                full_matrix[gi*(size_A+1) + gj] = local_block[i_loc][j_loc];
+            }
+        }
+    }
+
+    // Outros ranks enviam
+    if (rank != 0) {
+        int meta[4];
+        meta[0] = start_i;
+        meta[1] = start_j;
+        meta[2] = size_i;
+        meta[3] = size_j;
+        MPI_Send(meta, 4, MPI_INT, 0, TAG_META, MPI_COMM_WORLD);
+
+        int block_rows = size_i + 1;
+        int block_cols = size_j + 1;
+        int block_count = block_rows * block_cols;
+        mtype *buf = (mtype*) malloc(block_count * sizeof(mtype));
+        if (!buf) {
+            fprintf(stderr, "[rank %d] Falha ao alocar buffer para enviar bloco\n", rank);
+            MPI_Abort(MPI_COMM_WORLD, 1);
+        }
+        for (int i_loc = 0; i_loc < block_rows; i_loc++) {
+            for (int j_loc = 0; j_loc < block_cols; j_loc++) {
+                buf[i_loc * block_cols + j_loc] = local_block[i_loc][j_loc];
+            }
+        }
+        MPI_Send(buf, block_count, MPI_UNSIGNED_SHORT, 0, TAG_BLOCK, MPI_COMM_WORLD);
+        free(buf);
+    } else {
+        // rank 0 recebe de todos
+        for (int p = 1; p < nprocs; p++) {
+            int meta_recv[4];
+            MPI_Recv(meta_recv, 4, MPI_INT, p, TAG_META, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            int p_start_i = meta_recv[0];
+            int p_start_j = meta_recv[1];
+            int p_size_i = meta_recv[2];
+            int p_size_j = meta_recv[3];
+            int p_block_rows = p_size_i + 1;
+            int p_block_cols = p_size_j + 1;
+            int p_block_count = p_block_rows * p_block_cols;
+
+            mtype *buf_recv = (mtype*) malloc(p_block_count * sizeof(mtype));
+            if (!buf_recv) {
+                fprintf(stderr, "[rank 0] Falha ao alocar buffer para receber do rank %d\n", p);
+                MPI_Abort(MPI_COMM_WORLD, 1);
+            }
+            MPI_Recv(buf_recv, p_block_count, MPI_UNSIGNED_SHORT, p, TAG_BLOCK, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+            for (int i_loc = 0; i_loc < p_block_rows; i_loc++) {
+                int gi = p_start_i + i_loc;
+                for (int j_loc = 0; j_loc < p_block_cols; j_loc++) {
+                    int gj = p_start_j + j_loc;
+                    full_matrix[gi*(size_A+1) + gj] = buf_recv[i_loc * p_block_cols + j_loc];
+                }
+            }
+            free(buf_recv);
+        }
+    }
+
+    if (rank == 0) {
+        tCollect_end = MPI_Wtime();
+        // full_matrix está completa aqui
+        printf("LCS = %d\n", global_lcs);
+        printf("Comprimento da LCS: %d\n", global_lcs);
+        printf("Tempo de construção de P:         %.6f segundos\n", tP_end - tP_start);
+        printf("Tempo de inicialização (dados):   %.6f segundos\n", tInit_end - tInit_start);
+        printf("Tempo de cálculo DP (wavefront):  %.6f segundos\n", tDP_end - tDP_start);
+        printf("Tempo de coleta da matriz:        %.6f segundos\n", tCollect_end - tCollect_start);
+        printf("Tempo total:                      %.6f segundos\n", 
+              (tP_end - tP_start) + (tInit_end - tInit_start) + (tDP_end - tDP_start) + (tCollect_end - tCollect_start));
+
+        free(full_matrix);
+    }
+
+    // Liberação de recursos locais
+    for (int i = 0; i <= size_i; i++) {
+        free(local_block[i]);
+    }
+    free(local_block);
+    free(top_border);
+    free(left_border);
+    free(P4);
     free(seq_A);
     free(seq_B);
-    free(P4);
-    free(idx_A_glob);
-    free(rowA);
-    free(rowB);
-    free(sendcounts);
-    free(displs);
 
+    MPI_Comm_free(&grid_comm);
     MPI_Finalize();
     return EXIT_SUCCESS;
 }
+

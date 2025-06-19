@@ -1,0 +1,10 @@
+[01:50:38] teste_40000A vs teste_40000B
+--- Execução 1 ---
+LCS = 26173
+Comprimento da LCS: 26173
+Tempo de construção de P:         0.012126 segundos
+Tempo de inicialização (dados):   -0.023341 segundos
+Tempo de cálculo DP (wavefront):  8.282002 segundos
+Tempo de coleta da matriz:        18.955610 segundos
+Tempo total:                      27.226396 segundos
+--- Execução 2 ---
