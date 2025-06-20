@@ -1,0 +1,9 @@
+Estatísticas para output_teste_30000A_teste_40000B.out
+Métrica, Média, Desvio Padrão Relativo
+LCS, 22480.000000, 0.000000
+Comprimento da LCS, 22480.000000, 0.000000
+Tempo de construção de P, 0.002068, 0.076527
+Tempo de inicialização (dados), 0.666629, 0.003761
+Tempo de cálculo DP (wavefront), 5.922131, 0.001696
+Tempo de coleta da matriz, 13.490360, 0.001475
+Tempo total, 20.081188, 0.001291

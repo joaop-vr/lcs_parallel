@@ -1,0 +1,6 @@
+Estatísticas para output_teste_30000A_teste_50000B.out
+Métrica, Média, Desvio Padrão Relativo
+alocação+init, 0.195951, 0.065338
+LCS compute , 16.743574, 0.025103
+tempo total , 17.207653, 0.024863
+Score, 24623.000000, 0.000000
