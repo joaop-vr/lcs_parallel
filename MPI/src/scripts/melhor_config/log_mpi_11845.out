@@ -1,0 +1,11 @@
+=== Compilando lcs_mpi ===
+make: Nothing to be done for 'paralelo'.
+[15:19:08] teste_10000A vs teste_10000B
+[15:20:08] teste_1000A vs teste_1000B
+[15:20:27] teste_20000A vs teste_20000B
+[15:23:30] teste_2500A vs teste_2500B
+[15:23:51] teste_30000A vs teste_30000B
+[15:30:11] teste_40000A vs teste_40000B
+[15:41:15] teste_5000A vs teste_5000B
+[15:41:44] teste_7500A vs teste_7500B
+=== Todos os outputs estão em testes/outputs_4tasks ===

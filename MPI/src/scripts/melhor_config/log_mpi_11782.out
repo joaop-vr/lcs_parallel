@@ -1,0 +1,11 @@
+=== Compilando lcs_mpi ===
+mpicc -std=c99 -Wall -O3 -o lcs_mpi lcs_parallel.c
+[14:13:28] teste_10000A vs teste_10000B
+[14:14:21] teste_1000A vs teste_1000B
+[14:14:37] teste_20000A vs teste_20000B
+[14:17:17] teste_2500A vs teste_2500B
+[14:17:36] teste_30000A vs teste_30000B
+[14:23:17] teste_40000A vs teste_40000B
+[14:33:07] teste_5000A vs teste_5000B
+[14:33:32] teste_7500A vs teste_7500B
+=== Todos os outputs estão em testes/outputs_1task ===
