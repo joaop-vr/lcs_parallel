@@ -1,0 +1,9 @@
+Estatísticas para output_teste_7500A_teste_7500B.out
+Métrica, Média, Desvio Padrão Relativo
+LCS, 4871.000000, 0.000000
+Comprimento da LCS, 4871.000000, 0.000000
+Tempo de construção de P, 0.000608, 0.017095
+Tempo de inicialização (dados), 0.047645, 0.008179
+Tempo de cálculo DP (wavefront), 0.317855, 0.006222
+Tempo de coleta da matriz, 0.587163, 0.001925
+Tempo total, 0.953271, 0.002435
