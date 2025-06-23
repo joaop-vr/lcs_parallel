@@ -14,8 +14,8 @@ echo "=== Compilando lcs_sequencial ==="
 make sequencial || { echo "Falha na compilação"; exit 1; }
 
 # 2) Prepara diretório de outputs
-INPUT_DIR="../testes/melhor_config/inputs_resumidos"
-OUTPUT_DIR="../testes/outputs"
+INPUT_DIR="testes/melhor_config/inputs_resumidos"
+OUTPUT_DIR="testes/outputs"
 
 mkdir -p "${OUTPUT_DIR}"
 rm -f "${OUTPUT_DIR}"/output_*.out
