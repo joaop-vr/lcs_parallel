@@ -5,7 +5,7 @@
 #SBATCH --ntasks=2
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=4G
-#SBATCH --cpu-freq=3000000-3000000:performance
+#SBATCH --cpu-freq=3500000-3500000:performance
 #SBATCH --time=12:00:00
 #SBATCH --output=log_mpi_%j.out
 

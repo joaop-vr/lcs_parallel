@@ -5,7 +5,7 @@
 #SBATCH --ntasks=4                 # 4 processos MPI no total
 #SBATCH --ntasks-per-node=2
 #SBATCH --mem=4G
-#SBATCH --cpu-freq=3000000-3000000:performance
+#SBATCH --cpu-freq=3500000-3500000:performance
 #SBATCH --time=07:00:00
 #SBATCH --output=log_mpi_%j.out
 

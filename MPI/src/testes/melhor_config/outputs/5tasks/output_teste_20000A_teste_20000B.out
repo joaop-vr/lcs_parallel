@@ -1,169 +1,169 @@
-[17:40:58] teste_20000A vs teste_20000B
+[14:38:20] teste_20000A vs teste_20000B
 --- Execução 1 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.007083 segundos
-Tempo de inicialização (dados):   0.201769 segundos
-Tempo de cálculo DP (wavefront):  2.185992 segundos
-Tempo de coleta da matriz:        4.789219 segundos
-Tempo total:                      7.184063 segundos
+Tempo de construção de P:         0.015597 segundos
+Tempo de inicialização (dados):   0.175370 segundos
+Tempo de cálculo DP (wavefront):  1.788493 segundos
+Tempo de coleta da matriz:        4.710209 segundos
+Tempo total:                      6.689668 segundos
 --- Execução 2 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.013562 segundos
-Tempo de inicialização (dados):   0.204085 segundos
-Tempo de cálculo DP (wavefront):  2.671957 segundos
-Tempo de coleta da matriz:        4.801024 segundos
-Tempo total:                      7.690627 segundos
+Tempo de construção de P:         0.013636 segundos
+Tempo de inicialização (dados):   0.173160 segundos
+Tempo de cálculo DP (wavefront):  2.322660 segundos
+Tempo de coleta da matriz:        5.006551 segundos
+Tempo total:                      7.516008 segundos
 --- Execução 3 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.015059 segundos
-Tempo de inicialização (dados):   0.199003 segundos
-Tempo de cálculo DP (wavefront):  2.456504 segundos
-Tempo de coleta da matriz:        4.672523 segundos
-Tempo total:                      7.343089 segundos
+Tempo de construção de P:         0.012247 segundos
+Tempo de inicialização (dados):   0.190993 segundos
+Tempo de cálculo DP (wavefront):  2.110734 segundos
+Tempo de coleta da matriz:        4.944109 segundos
+Tempo total:                      7.258084 segundos
 --- Execução 4 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.013558 segundos
-Tempo de inicialização (dados):   0.207644 segundos
-Tempo de cálculo DP (wavefront):  2.599398 segundos
-Tempo de coleta da matriz:        4.886185 segundos
-Tempo total:                      7.706785 segundos
+Tempo de construção de P:         0.015377 segundos
+Tempo de inicialização (dados):   0.179881 segundos
+Tempo de cálculo DP (wavefront):  2.745437 segundos
+Tempo de coleta da matriz:        4.983955 segundos
+Tempo total:                      7.924650 segundos
 --- Execução 5 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.012843 segundos
-Tempo de inicialização (dados):   0.200705 segundos
-Tempo de cálculo DP (wavefront):  2.814762 segundos
-Tempo de coleta da matriz:        5.061655 segundos
-Tempo total:                      8.089964 segundos
+Tempo de construção de P:         0.016113 segundos
+Tempo de inicialização (dados):   0.208362 segundos
+Tempo de cálculo DP (wavefront):  2.622260 segundos
+Tempo de coleta da matriz:        4.788657 segundos
+Tempo total:                      7.635394 segundos
 --- Execução 6 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.009296 segundos
-Tempo de inicialização (dados):   0.213077 segundos
-Tempo de cálculo DP (wavefront):  2.349139 segundos
-Tempo de coleta da matriz:        5.024623 segundos
-Tempo total:                      7.596136 segundos
+Tempo de construção de P:         0.011137 segundos
+Tempo de inicialização (dados):   0.175379 segundos
+Tempo de cálculo DP (wavefront):  1.934258 segundos
+Tempo de coleta da matriz:        4.919704 segundos
+Tempo total:                      7.040479 segundos
 --- Execução 7 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.013799 segundos
-Tempo de inicialização (dados):   0.202127 segundos
-Tempo de cálculo DP (wavefront):  2.334637 segundos
-Tempo de coleta da matriz:        4.808088 segundos
-Tempo total:                      7.358651 segundos
+Tempo de construção de P:         0.015603 segundos
+Tempo de inicialização (dados):   0.179431 segundos
+Tempo de cálculo DP (wavefront):  2.373951 segundos
+Tempo de coleta da matriz:        4.921438 segundos
+Tempo total:                      7.490423 segundos
 --- Execução 8 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.012787 segundos
-Tempo de inicialização (dados):   0.200391 segundos
-Tempo de cálculo DP (wavefront):  2.174087 segundos
-Tempo de coleta da matriz:        5.089234 segundos
-Tempo total:                      7.476498 segundos
+Tempo de construção de P:         0.012893 segundos
+Tempo de inicialização (dados):   0.174990 segundos
+Tempo de cálculo DP (wavefront):  2.799289 segundos
+Tempo de coleta da matriz:        4.916000 segundos
+Tempo total:                      7.903172 segundos
 --- Execução 9 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.021880 segundos
-Tempo de inicialização (dados):   0.198450 segundos
-Tempo de cálculo DP (wavefront):  2.074878 segundos
-Tempo de coleta da matriz:        5.074666 segundos
-Tempo total:                      7.369873 segundos
+Tempo de construção de P:         0.013143 segundos
+Tempo de inicialização (dados):   0.171570 segundos
+Tempo de cálculo DP (wavefront):  2.258880 segundos
+Tempo de coleta da matriz:        4.680047 segundos
+Tempo total:                      7.123640 segundos
 --- Execução 10 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.014493 segundos
-Tempo de inicialização (dados):   0.201624 segundos
-Tempo de cálculo DP (wavefront):  2.550057 segundos
-Tempo de coleta da matriz:        4.742954 segundos
-Tempo total:                      7.509128 segundos
+Tempo de construção de P:         0.013633 segundos
+Tempo de inicialização (dados):   0.178181 segundos
+Tempo de cálculo DP (wavefront):  1.748730 segundos
+Tempo de coleta da matriz:        4.839403 segundos
+Tempo total:                      6.779948 segundos
 --- Execução 11 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.019053 segundos
-Tempo de inicialização (dados):   0.202087 segundos
-Tempo de cálculo DP (wavefront):  2.796711 segundos
-Tempo de coleta da matriz:        5.030314 segundos
-Tempo total:                      8.048164 segundos
+Tempo de construção de P:         0.013133 segundos
+Tempo de inicialização (dados):   0.171280 segundos
+Tempo de cálculo DP (wavefront):  2.067332 segundos
+Tempo de coleta da matriz:        5.143009 segundos
+Tempo total:                      7.394753 segundos
 --- Execução 12 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.018974 segundos
-Tempo de inicialização (dados):   0.207490 segundos
-Tempo de cálculo DP (wavefront):  2.160085 segundos
-Tempo de coleta da matriz:        5.145949 segundos
-Tempo total:                      7.532497 segundos
+Tempo de construção de P:         0.015050 segundos
+Tempo de inicialização (dados):   0.177343 segundos
+Tempo de cálculo DP (wavefront):  2.256081 segundos
+Tempo de coleta da matriz:        4.907230 segundos
+Tempo total:                      7.355705 segundos
 --- Execução 13 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.019055 segundos
-Tempo de inicialização (dados):   0.216839 segundos
-Tempo de cálculo DP (wavefront):  2.301554 segundos
-Tempo de coleta da matriz:        5.049045 segundos
-Tempo total:                      7.586494 segundos
+Tempo de construção de P:         0.015608 segundos
+Tempo de inicialização (dados):   0.182277 segundos
+Tempo de cálculo DP (wavefront):  2.735987 segundos
+Tempo de coleta da matriz:        4.878824 segundos
+Tempo total:                      7.812697 segundos
 --- Execução 14 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.012943 segundos
-Tempo de inicialização (dados):   0.204641 segundos
-Tempo de cálculo DP (wavefront):  3.232357 segundos
-Tempo de coleta da matriz:        5.027763 segundos
-Tempo total:                      8.477704 segundos
+Tempo de construção de P:         0.011003 segundos
+Tempo de inicialização (dados):   0.179114 segundos
+Tempo de cálculo DP (wavefront):  2.368308 segundos
+Tempo de coleta da matriz:        4.814152 segundos
+Tempo total:                      7.372577 segundos
 --- Execução 15 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.011055 segundos
-Tempo de inicialização (dados):   0.214136 segundos
-Tempo de cálculo DP (wavefront):  2.188417 segundos
-Tempo de coleta da matriz:        4.803825 segundos
-Tempo total:                      7.217433 segundos
+Tempo de construção de P:         0.011512 segundos
+Tempo de inicialização (dados):   0.178741 segundos
+Tempo de cálculo DP (wavefront):  2.446472 segundos
+Tempo de coleta da matriz:        4.661609 segundos
+Tempo total:                      7.298334 segundos
 --- Execução 16 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.018591 segundos
-Tempo de inicialização (dados):   0.197278 segundos
-Tempo de cálculo DP (wavefront):  2.403764 segundos
-Tempo de coleta da matriz:        4.807517 segundos
-Tempo total:                      7.427150 segundos
+Tempo de construção de P:         0.010113 segundos
+Tempo de inicialização (dados):   0.171524 segundos
+Tempo de cálculo DP (wavefront):  1.911999 segundos
+Tempo de coleta da matriz:        5.053731 segundos
+Tempo total:                      7.147367 segundos
 --- Execução 17 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.013102 segundos
-Tempo de inicialização (dados):   0.201501 segundos
-Tempo de cálculo DP (wavefront):  3.338432 segundos
-Tempo de coleta da matriz:        4.642516 segundos
-Tempo total:                      8.195552 segundos
+Tempo de construção de P:         0.012933 segundos
+Tempo de inicialização (dados):   0.189405 segundos
+Tempo de cálculo DP (wavefront):  2.300667 segundos
+Tempo de coleta da matriz:        4.848499 segundos
+Tempo total:                      7.351505 segundos
 --- Execução 18 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.006843 segundos
-Tempo de inicialização (dados):   0.201764 segundos
-Tempo de cálculo DP (wavefront):  2.388097 segundos
-Tempo de coleta da matriz:        4.636685 segundos
-Tempo total:                      7.233388 segundos
+Tempo de construção de P:         0.015636 segundos
+Tempo de inicialização (dados):   0.176984 segundos
+Tempo de cálculo DP (wavefront):  2.366384 segundos
+Tempo de coleta da matriz:        4.830699 segundos
+Tempo total:                      7.389702 segundos
 --- Execução 19 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.012860 segundos
-Tempo de inicialização (dados):   0.195469 segundos
-Tempo de cálculo DP (wavefront):  2.241569 segundos
-Tempo de coleta da matriz:        4.809299 segundos
-Tempo total:                      7.259197 segundos
+Tempo de construção de P:         0.006852 segundos
+Tempo de inicialização (dados):   0.175326 segundos
+Tempo de cálculo DP (wavefront):  1.807866 segundos
+Tempo de coleta da matriz:        5.100904 segundos
+Tempo total:                      7.090948 segundos
 --- Execução 20 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.011922 segundos
-Tempo de inicialização (dados):   0.203591 segundos
-Tempo de cálculo DP (wavefront):  2.240866 segundos
-Tempo de coleta da matriz:        4.950980 segundos
-Tempo total:                      7.407359 segundos
+Tempo de construção de P:         0.015601 segundos
+Tempo de inicialização (dados):   0.176133 segundos
+Tempo de cálculo DP (wavefront):  1.929738 segundos
+Tempo de coleta da matriz:        4.688971 segundos
+Tempo total:                      6.810444 segundos
 --- Execução 21 ---
 LCS = 13057
 Comprimento da LCS: 13057
-Tempo de construção de P:         0.013585 segundos
-Tempo de inicialização (dados):   0.207542 segundos
-Tempo de cálculo DP (wavefront):  1.956913 segundos
-Tempo de coleta da matriz:        4.616345 segundos
-Tempo total:                      6.794385 segundos
+Tempo de construção de P:         0.018398 segundos
+Tempo de inicialização (dados):   0.177112 segundos
+Tempo de cálculo DP (wavefront):  1.892127 segundos
+Tempo de coleta da matriz:        4.665086 segundos
+Tempo total:                      6.752723 segundos
